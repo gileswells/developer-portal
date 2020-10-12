@@ -13,7 +13,7 @@ import { SwaggerPlugins, System } from './swaggerPlugins';
 
 import 'swagger-ui-themes/themes/3.x/theme-muted.css';
 
-export interface ISwaggerDocsProps {
+export interface SwaggerDocsProps {
   apiName: string;
   docSource: APIDocSource;
   docUrl: string;
@@ -23,9 +23,9 @@ export interface ISwaggerDocsProps {
   setRequestedApiVersion: (version: string) => void;
   version: string;
   versionNumber: string;
-}
+} 
 
-export interface IVersionInfo {
+export interface VersionInfo {
   version: string;
   status: string;
   path: string;
@@ -56,14 +56,14 @@ const mapDispatchToProps = (
   };
 };
 
-class SwaggerDocs extends React.Component<ISwaggerDocsProps> {
+class SwaggerDocs extends React.Component<SwaggerDocsProps> {
   public async componentDidMount() {
     await this.setMetadataAndDocUrl();
     this.setSearchParam();
     this.renderSwaggerUI();
   }
 
-  public async componentDidUpdate(prevProps: ISwaggerDocsProps) {
+  public async componentDidUpdate(prevProps: SwaggerDocsProps) {
     if (prevProps.apiName !== this.props.apiName) {
       await this.setMetadataAndDocUrl();
       this.setSearchParam();
