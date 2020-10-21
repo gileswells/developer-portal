@@ -7,7 +7,7 @@ import * as actions from '../../actions';
 import { APIDescription, ApiDescriptionPropType, APIDocSource } from '../../apiDefs/schema';
 import { Flag } from '../../flags';
 import { history } from '../../store';
-import SwaggerDocs from './SwaggerDocs';
+import { SwaggerDocs } from './SwaggerDocs';
 
 import '../../../node_modules/react-tabs/style/react-tabs.scss';
 
