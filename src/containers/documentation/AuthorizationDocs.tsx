@@ -83,7 +83,7 @@ const AuthorizationDocs = (): JSX.Element => {
       </Helmet>
       <PageHeader header="Authorization" />
       <PageLinks />
-      <GettingStarted />
+      <GettingStarted test="sdfdsf" />
       <BuildingOIDCContent />
       <ScopesContent />
       <IdToken />

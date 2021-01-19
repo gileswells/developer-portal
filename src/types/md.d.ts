@@ -9,6 +9,7 @@ declare module '*.mdx' {
   interface MarkdownComponentProps {
     className?: string;
     style?: string;
+    test?: string;
   }
 
   /**
