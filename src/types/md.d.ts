@@ -9,7 +9,8 @@ declare module '*.mdx' {
   interface MarkdownComponentProps {
     className?: string;
     style?: string;
-    test?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    propObj?: any;
   }
 
   /**

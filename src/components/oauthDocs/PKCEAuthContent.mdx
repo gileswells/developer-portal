@@ -1,0 +1,91 @@
+---
+imports:
+  '{ HashLink }' : 'react-router-hash-link'
+  '{ Link }' : 'react-router-dom'
+  '{APISelector, CodeWrapper }': ../index
+  'SyntaxHighlighter' : 'react-syntax-highlighter'
+  '{ Prism }' : 'react-syntax-highlighter/dist/cjs/prism'
+  'PKCEQueryParamsTable': ./PKCEQueryParamsTable.mdx
+---
+
+### PKCE (Proof Key for Code Exchange) Authorization {tabIndex="-1" #pkce-authorization}
+
+**NOTE:** We provide a [sample CLI application](https://github.com/department-of-veterans-affairs/vets-api-clients/tree/master/samples/oauth_pkce_cli) for getting started using PKCE.
+Begin the OpenID Connect authorization by using the authorization endpoint, query parameters, and scopes listed below.
+
+<APISelector options={ props.propObj.options } selectedOption={ props.propObj.selectedOption } />
+<CodeWrapper>
+
+<SyntaxHighlighter language="plaintext" style="Prism">
+{{ props.propObj.authUrl }}
+</SyntaxHighlighter>
+
+</CodeWrapper>
+
+<PKCEQueryParamsTable />
+
+The Veteran will need to grant your application access permission. To do this, direct the Veteran to the URL above. The Veteran is taken through an authentication flow by VA.gov and asked to consent to your application accessing their data. The data that can be accessed is defined by your scopes. After the Veteran gives permission, your application will receive an authorization code.
+
+### Authorization Code Grant {#authorization-code-grant-2}
+
+After the Veteran consents to authorize your application, their browser will redirect to your application with the response shown below, which returns the `code` and `state` parameters you must use to make a request to our authorization service and the `code_verifier` used to create the `code_challenge` in the previous step.
+
+<CodeWrapper>
+
+<SyntaxHighlighter language="plaintext" style="Prism">  
+{{ props.propObj.codeGrant }}
+</SyntaxHighlighter>
+
+</CodeWrapper>
+
+Use the following format, in HTTP basic authentication, for your request.
+
+- Use the `code` and `state` parameters that were returned in the previous step.
+- Be sure to replace `< yourRedirectURL >` with the redirect URL that you provided during registration.
+
+<APISelector options={ props.propObj.options } selectedOption={ props.propObj.selectedOption } />
+<CodeWrapper>
+
+<SyntaxHighlighter language="http" style="Prism">
+{{ props.propObj.postToken }}
+</SyntaxHighlighter>
+
+</CodeWrapper>
+
+The authorization server will send a 200 response with an <HashLink to='#id-token'>access token</HashLink>. If you requested the `offline_access` scope, you will also receive a `refresh_token`. The response body will look like this, where `expires_in` is the time in seconds before the token expires:
+
+<APISelector options={ props.propObj.options } selectedOption={ props.propObj.selectedOption } />
+<CodeWrapper>
+
+<SyntaxHighlighter language="json" style="Prism">
+{{ props.propObj.postTokenResponse200 }}
+</SyntaxHighlighter>
+
+</CodeWrapper>
+
+If an error occurs, you will instead receive a 400 response, like this:
+
+<CodeWrapper>
+
+<SyntaxHighlighter language="http" style="Prism">
+{{ props.propObj.postTokenResponse400 }}
+</SyntaxHighlighter>
+
+</CodeWrapper>
+
+Use the returned `access_token` to authorize requests to our platform by including it in the header of HTTP requests as `Authorization: Bearer {access_token}`.
+
+**NOTE:** the <HashLink to='#id-token'>access token</HashLink> will only work for the API and scopes for which you have previously initiated authorization.
+
+Use the `refresh_token` to obtain a new `access_token` after its expiry by sending the following request.
+
+<APISelector options={ props.propObj.options } selectedOption={ props.propObj.selectedOption } />
+<CodeWrapper>
+
+<SyntaxHighlighter language="http" style="Prism">
+{{ props.propObj.postTokenRefresh }}
+</SyntaxHighlighter>
+
+</CodeWrapper>
+
+The response will return a new `access_token` and `refresh_token`, if you requested the `offline_access` scope.
