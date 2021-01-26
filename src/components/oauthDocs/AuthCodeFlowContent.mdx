@@ -2,11 +2,13 @@
 imports:
   '{ HashLink }' : 'react-router-hash-link'
   '{ Link }' : 'react-router-dom'
-  '{APISelector, CodeWrapper }': ../index
+  '{ APISelector, CodeWrapper }': ../index
   'SyntaxHighlighter' : 'react-syntax-highlighter'
   '{ Prism }' : 'react-syntax-highlighter/dist/cjs/prism'
   'AuthCodeFlowQueryParamsTable': ./AuthCodeFlowQueryParamsTable.mdx
 ---
+
+<!-- change so parts for the url uses props, and try to extend unknown so props are cleaner -->
 
 ### Initiating the Authorization Code Flow {tabIndex="-1" #authorization-code-flow}
 
@@ -17,9 +19,15 @@ Begin the OpenID Connect authorization by using the authorization endpoint, quer
 <APISelector options={ props.propObj.options } selectedOption={ props.propObj.selectedOption } />
 <CodeWrapper>
 
-<SyntaxHighlighter language="plaintext" style="Prism">
-{{ props.propObj.authUrl }}
-</SyntaxHighlighter>
+```plaintext
+https://sandbox-api.va.gov{{props.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2'}}/authorization?
+  client_id=0oa1c01m77heEXUZt2p7
+  &redirect_uri=<yourRedirectURL>
+  &response_type=code
+  &scope={{props.apiDef?.oAuthInfo?.scopes.join(' ') ?? 'profile openid offline_access'}}
+  &state=1AOQK33KIfH2g0ADHvU1oWAb7xQY7p6qWnUFiG1ffcUdrbCY1DBAZ3NffrjaoBGQ
+  &nonce=o5jYpLSe29RBHBsn5iAnMKYpYw2Iw9XRBweacc001hRo5xxJEbHuniEbhuxHfVZy
+```
 
 </CodeWrapper>
 
@@ -33,23 +41,33 @@ After a Veteran gives authorization for you to access their data, their browser 
 
 <CodeWrapper>
 
-<SyntaxHighlighter language="plaintext" style="Prism">
-{{ props.propObj.codeGrant }}
-</SyntaxHighlighter>
+```plaintext
+GET <yourRedirectURL>?
+  code=z92dapo5
+  &state=af0ifjsldkj
+  Host: <yourRedirectHost>
+```
 
 </CodeWrapper>
 
 Use the following format, in HTTP basic authentication, for your request using the returned code and state parameters.
 
 - Use your client ID and client secret as the HTTP basic authentication username and password.
-- Be sure to replace `< yourRedirectURL >` with the redirect URL that you provided during registration.
+- Be sure to replace `<yourRedirectURL>` with the redirect URL that you provided during registration.
 
 <APISelector options={ props.propObj.options } selectedOption={ props.propObj.selectedOption } />
 <CodeWrapper>
 
-<SyntaxHighlighter language="http" style="Prism">
-{{ props.propObj.postToken }}
-</SyntaxHighlighter>
+```http
+POST {{props.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2'}}/token HTTP/1.1
+Host: sandbox-api.va.gov
+Content-Type: application/x-www-form-urlencoded
+Authorization: Basic { base64 encoded *client_id* + ':' + *client_secret* }
+
+grant_type=authorization_code
+&code=z92dapo5&state=af0ifjsldkj
+&redirect_uri=<yourRedirectURL>
+```
 
 </CodeWrapper>
 
@@ -58,9 +76,22 @@ The authorization server will respond with an <HashLink to='#id-token'>access to
 <APISelector options={ props.propObj.options } selectedOption={ props.propObj.selectedOption } />
 <CodeWrapper>
 
-<SyntaxHighlighter language="http" style="Prism">
-{{ props.propObj.postTokenResponse200 }}
-</SyntaxHighlighter>
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: no-store
+Pragma: no-cache
+
+{
+    "access_token": "SlAV32hkKG",
+    "expires_in": 3600,
+    "refresh_token": "8xLOxBtZp8",
+    "scope": "{{props.apiDef?.oAuthInfo?.scopes.join(' ') ?? 'profile openid offline_access'}}",
+    "patient": "1558538470",
+    "state": "af0ifjsldkj",
+    "token_type": "Bearer",
+}
+```
 
 </CodeWrapper>
 
@@ -68,9 +99,16 @@ If an error occurs, you will instead receive a response like this:
 
 <CodeWrapper>
 
-<SyntaxHighlighter language="http" style="Prism">
-{{ props.propObj.postTokenResponse400 }}
-</SyntaxHighlighter>
+```http
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+Cache-Control: no-store
+Pragma: no-cache
+
+{
+    "error": "invalid_request"
+}
+```
 
 </CodeWrapper>
 
@@ -83,9 +121,14 @@ Use the `refresh_token` to obtain a new `access_token` after its expiry by sendi
 <APISelector options={ props.propObj.options } selectedOption={ props.propObj.selectedOption } />
 <CodeWrapper>
 
-<SyntaxHighlighter language="http" style="Prism">
-{{ props.propObj.postTokenRefresh }}
-</SyntaxHighlighter>
+```http
+POST {{props.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2'}}/revoke HTTP/1.1
+Host: sandbox-api.va.gov
+Content-Type: application/x-www-form-urlencoded
+Authorization: Basic { base64 encoded *client_id* + ':' + *client_secret* }
+
+token={ *refresh_token* }&token_type_hint=refresh_token
+```
 
 </CodeWrapper>
 
@@ -97,9 +140,10 @@ The manage endpoint directs end users to a URL where they can view which applica
 
 <CodeWrapper>
 
-<SyntaxHighlighter language="http" style="Prism">
-{{ props.propObj.authManageAccount }}
-</SyntaxHighlighter>
+```http
+POST {{props.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2'}}/token HTTP/1.1
+Host: sandbox-api.va.gov
+```
 
 </CodeWrapper>
 
@@ -110,18 +154,28 @@ Clients may revoke their own `access_tokens` and `refresh_tokens` using the revo
 <APISelector options={ props.propObj.options } selectedOption={ props.propObj.selectedOption } />
 <CodeWrapper>
 
-<SyntaxHighlighter language="http" style="Prism">
-{{ props.propObj.authRevokeTokenAccess }}
-</SyntaxHighlighter>
+```http
+POST {{props.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2'}}/revoke HTTP/1.1
+Host: sandbox-api.va.gov
+Content-Type: application/x-www-form-urlencoded
+Authorization: Basic { base64 encoded *client_id* + ':' + *client_secret* }
+
+token={ *access_token* }&token_type_hint=access_token
+```
 
 </CodeWrapper>
 
 <APISelector options={ props.propObj.options } selectedOption={ props.propObj.selectedOption } />
 <CodeWrapper>
 
-<SyntaxHighlighter language="http" style="Prism">
-{{ props.propObj.authRevokeTokenRefresh }}
-</SyntaxHighlighter>
+```http
+POST {{props.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2'}}/revoke HTTP/1.1
+Host: sandbox-api.va.gov
+Content-Type: application/x-www-form-urlencoded
+Authorization: Basic { base64 encoded *client_id* + ':' + *client_secret* }
+
+token={ *refresh_token* }&token_type_hint=refresh_token
+```
 
 </CodeWrapper>
 
@@ -134,9 +188,16 @@ A user will be prompted only once to consent to each client&#39;s use of their d
 <APISelector options={ props.propObj.options } selectedOption={ props.propObj.selectedOption } />
 <CodeWrapper>
 
-<SyntaxHighlighter language="http" style="Prism">
-{{ props.propObj.authRevokeGrant }}
-</SyntaxHighlighter>
+```http
+DELETE {{props.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2'}}/grants HTTP/1.1
+Host: sandbox-api.va.gov
+Content-Type: application/x-www-form-urlencoded
+
+{
+    "client_id": {client_id},
+    "email": {test account email}
+}
+```
 
 </CodeWrapper>
 
@@ -144,8 +205,16 @@ The client ID is your application client ID (`client_id`) and the email is the u
 
 <CodeWrapper>
 
-<SyntaxHighlighter language="http" style="Prism">
-{{ props.propObj.authRevokeGrantError }}
-</SyntaxHighlighter>
+```http
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+Cache-Control: no-store
+Pragma: no-cache
+
+{
+    "error": "invalid_request",
+    "error_description": "Invalid email address."
+}
+```
 
 </CodeWrapper>
