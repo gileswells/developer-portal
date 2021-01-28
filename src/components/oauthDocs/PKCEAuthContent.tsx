@@ -15,13 +15,14 @@ const PKCEAuthContent = (): JSX.Element => {
   };
 
   const propObj = {
+    apiDef,
     options: selectorProps.options,
     selectedOption: selectorProps.selectedOption,
   };
 
   return (
     <section aria-labelledby="pkce-authorization">
-      <PKCEAuthContentMDX propObj={propObj} apiDef={apiDef} />
+      <PKCEAuthContentMDX propObj={propObj} />
     </section>
   );
 };

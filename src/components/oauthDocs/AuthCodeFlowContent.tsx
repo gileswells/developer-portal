@@ -15,13 +15,14 @@ const AuthCodeFlowContent = (): JSX.Element => {
   };
 
   const propObj = {
+    apiDef,
     options: selectorProps.options,
     selectedOption: selectorProps.selectedOption,
   };
 
   return (
     <section aria-labelledby="authorization-code-flow">
-      <AuthCodeFlowContentMDX propObj={propObj} apiDef={apiDef} />
+      <AuthCodeFlowContentMDX propObj={propObj} />
     </section>
   );
 };
