@@ -3,9 +3,6 @@ imports:
   '{ HashLink }' : 'react-router-hash-link'
   '{ Link }' : 'react-router-dom'
   '{ APISelector, CodeWrapper }': ../index
-  'SyntaxHighlighter' : 'react-syntax-highlighter'
-  '{ Prism }' : 'react-syntax-highlighter/dist/cjs/prism'
-  'PKCEQueryParamsTable': ./PKCEQueryParamsTable.mdx
 ---
 
 ### PKCE (Proof Key for Code Exchange) Authorization {tabIndex="-1" #pkce-authorization}
@@ -17,7 +14,7 @@ Begin the OpenID Connect authorization by using the authorization endpoint, quer
 <CodeWrapper>
 
 ```plaintext
-https://sandbox-api.va.gov{{props.propObj.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2'}}/authorization?
+https://sandbox-api.va.gov{{props.propObj.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2/{api}/v1'}}/authorization?
   client_id=0oa1c01m77heEXUZt2p7
   &redirect_uri=<yourRedirectURL>
   &response_type=code
@@ -29,7 +26,16 @@ https://sandbox-api.va.gov{{props.propObj.apiDef?.oAuthInfo?.baseAuthPath ?? '/o
 
 </CodeWrapper>
 
-<PKCEQueryParamsTable />
+| Query Parameter         | Required     | Values |
+| ----------------------- | ------------ | ------ |
+| `client_id`             | **Required** | The `client_id` issued by the VA Lighthouse APIs team team |
+| `redirect_uri`          | **Required** | The URL you supplied. The user will be redirected to this URL after authorizing your application. |
+| `response_type`         | **Required** | Supported response types: `code` |
+| `code_challenge`        | **Required** | Base64 encoded challenge generated from your `code_verifier` |
+| `code_challenge_method` | **Required** | Supported code challenges: `S256` |
+| `state`                 | **Required** | Specifying a `state` param helps protect against some classes of Cross Site Request Forgery (CSRF) attacks, and applications must include it. The `state` param will be passed back from the authorization server to your redirect URL unchanged, and your application should verify that it has the expected value. This helps assure that the client receiving the authorization response is the same as the client that initiated the authorization process. |
+| `scope`                 | Optional     | Will use your application's default scopes unless you specify a smaller subset of scopes separated by a space. Review the <HashLink to={{ ...location, hash: '#scopes' }}>Scopes section</HashLink> for more information. |
+| `prompt`                | Optional     | <p>Supported prompts: `login`, `consent` and `none`.</p><p>If `login` is specified, the user will be forced to provide credentials regardless of session state. If omitted, an existing active session with the identity provider may not require the user to provide credentials.</p><p>If `consent` is specified, the user will be asked to consent to their scopes being used regardless of prior consent.</p><p>If `none` is specified, an application will attempt an authorization request without user interaction. When the session is invalid or there are scopes the user has not consented to, one of the following errors will be thrown: `login_required` or `consent_required`.</p> |
 
 The Veteran will need to grant your application access permission. To do this, direct the Veteran to the URL above. The Veteran is taken through an authentication flow by VA.gov and asked to consent to your application accessing their data. The data that can be accessed is defined by your scopes. After the Veteran gives permission, your application will receive an authorization code.
 
@@ -57,7 +63,7 @@ Use the following format, in HTTP basic authentication, for your request.
 <CodeWrapper>
 
 ```http
-POST {{props.propObj.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2'}}/token HTTP/1.1
+POST {{props.propObj.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2/{api}/v1'}}/token HTTP/1.1
 Host: sandbox-api.va.gov
 Content-Type: application/x-www-form-urlencoded
 
@@ -70,7 +76,7 @@ grant_type=authorization_code
 
 </CodeWrapper>
 
-The authorization server will send a 200 response with an <HashLink to='#id-token'>access token</HashLink>. If you requested the `offline_access` scope, you will also receive a `refresh_token`. The response body will look like this, where `expires_in` is the time in seconds before the token expires:
+The authorization server will send a 200 response with an <HashLink to={{ ...location, hash: '#id-token' }}>access token</HashLink>. If you requested the `offline_access` scope, you will also receive a `refresh_token`. The response body will look like this, where `expires_in` is the time in seconds before the token expires:
 
 <APISelector options={ props.propObj.options } selectedOption={ props.propObj.selectedOption } />
 <CodeWrapper>
@@ -107,7 +113,7 @@ Pragma: no-cache
 
 Use the returned `access_token` to authorize requests to our platform by including it in the header of HTTP requests as `Authorization: Bearer {access_token}`.
 
-**NOTE:** the <HashLink to='#id-token'>access token</HashLink> will only work for the API and scopes for which you have previously initiated authorization.
+**NOTE:** the <HashLink to={{ ...location, hash: '#id-token' }}>access token</HashLink> will only work for the API and scopes for which you have previously initiated authorization.
 
 Use the `refresh_token` to obtain a new `access_token` after its expiry by sending the following request.
 
@@ -115,7 +121,7 @@ Use the `refresh_token` to obtain a new `access_token` after its expiry by sendi
 <CodeWrapper>
 
 ```http
-POST {{props.propObj.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2'}}/token HTTP/1.1
+POST {{props.propObj.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2/{api}/v1'}}/token HTTP/1.1
 Host: sandbox-api.va.gov
 Content-Type: application/x-www-form-urlencoded
 

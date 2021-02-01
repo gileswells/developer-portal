@@ -3,9 +3,6 @@ imports:
   '{ HashLink }' : 'react-router-hash-link'
   '{ Link }' : 'react-router-dom'
   '{ APISelector, CodeWrapper }': ../index
-  'SyntaxHighlighter' : 'react-syntax-highlighter'
-  '{ Prism }' : 'react-syntax-highlighter/dist/cjs/prism'
-  'AuthCodeFlowQueryParamsTable': ./AuthCodeFlowQueryParamsTable.mdx
 ---
 
 ### Initiating the Authorization Code Flow {tabIndex="-1" #authorization-code-flow}
@@ -18,7 +15,7 @@ Begin the OpenID Connect authorization by using the authorization endpoint, quer
 <CodeWrapper>
 
 ```plaintext
-https://sandbox-api.va.gov{{props.propObj.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2'}}/authorization?
+https://sandbox-api.va.gov{{props.propObj.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2/{api}/v1'}}/authorization?
   client_id=0oa1c01m77heEXUZt2p7
   &redirect_uri=<yourRedirectURL>
   &response_type=code
@@ -29,7 +26,15 @@ https://sandbox-api.va.gov{{props.propObj.apiDef?.oAuthInfo?.baseAuthPath ?? '/o
 
 </CodeWrapper>
 
-<AuthCodeFlowQueryParamsTable />
+| Query Parameter | Required     | Values |
+| --------------- | ------------ | ------ |
+| `client_id`     | **Required** | The `client_id` issued by the VA API Platform team |
+| `redirect_uri`  | **Required** | The URL you supplied. The user will be redirected to this URL after authorizing your application. |
+| `response_type` | **Required** | Supported response types: `code` |
+| `state`         | **Required** | Ensures authorization flow integrity. |
+| `scope`         | **Required** | Will use your application's default scopes unless you specify a smaller subset of scopes separated by a space. Review the <HashLink to={{ ...location, hash: '#scopes' }}>Scopes section</HashLink> for more information. |
+| `nonce`         | Optional     | <p>Using a `nonce` with JWTs prevents some kinds of replay attacks where a malicious party can attempt to resend an `id_token` request in order to impersonate a user of your application.</p><p>A nonce should be generated on a per-session basis and stored on the user's client. If the user requested an id_token (by including the openid scope in the authorization request) then the <HashLink to={{ ...location, hash: '#payload' }}>payload of the id_token</HashLink> will contain a nonce value that should match the nonce value included in the authorization request.</p><p>The [OpenID Connect documentation](https://openid.net/specs/openid-connect-core-1_0.html#NonceNotes) offers the following suggestion for generating nonces:</p><p>The nonce parameter value needs to include per-session state and be unguessable to attackers. One method to achieve this for Web Server Clients is to store a cryptographically random value as an HttpOnly session cookie and use a cryptographic hash of the value as the nonce parameter. In that case, the nonce in the returned ID Token is compared to the hash of the session cookie to detect ID Token replay by third parties. A related method applicable to JavaScript Clients is to store the cryptographically random value in HTML5 local storage and use a cryptographic hash of this value. </p> |
+| `prompt`        | Optional     | <p>Supported prompts: `login`, `consent` and `none`.</p><p>If `login` is specified, the user will be forced to provide credentials regardless of session state. If omitted, an existing active session with the identity provider may not require the user to provide credentials.</p><p>If `consent` is specified, the user will be asked to consent to their scopes being used regardless of prior consent.</p><p>If `none` is specified, an application will attempt an authorization request without user interaction. When the session is invalid or there are scopes the user has not consented to, one of the following errors will be thrown: `login_required` or `consent_required`.</p> |
 
 The Veteran will need to grant your application access permission. To do this, direct the Veteran to the URL above. The Veteran is taken through an authentication flow by VA.gov and asked to consent to your application accessing their data. The data that can be accessed is defined by your scopes. After the Veteran gives permission, your application will receive a response based on the `response_type` you requested.
 
@@ -43,7 +48,6 @@ After a Veteran gives authorization for you to access their data, their browser 
 GET <yourRedirectURL>?
   code=z92dapo5
   &state=af0ifjsldkj
-  Host: <yourRedirectHost>
 ```
 
 </CodeWrapper>
@@ -57,7 +61,7 @@ Use the following format, in HTTP basic authentication, for your request using t
 <CodeWrapper>
 
 ```http
-POST {{props.propObj.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2'}}/token HTTP/1.1
+POST {{props.propObj.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2/{api}/v1'}}/token HTTP/1.1
 Host: sandbox-api.va.gov
 Content-Type: application/x-www-form-urlencoded
 Authorization: Basic { base64 encoded *client_id* + ':' + *client_secret* }
@@ -69,7 +73,7 @@ grant_type=authorization_code
 
 </CodeWrapper>
 
-The authorization server will respond with an <HashLink to='#id-token'>access token</HashLink>. If you requested the `offline_access` scope, you will also receive a`refresh_token`. The response will look like this:
+The authorization server will respond with an <HashLink to={{ ...location, hash: '#id-token' }}>access token</HashLink>. If you requested the `offline_access` scope, you will also receive a`refresh_token`. The response will look like this:
 
 <APISelector options={ props.propObj.options } selectedOption={ props.propObj.selectedOption } />
 <CodeWrapper>
@@ -112,7 +116,7 @@ Pragma: no-cache
 
 Use the returned `access_token` to authorize requests to our platform by including it in the header of HTTP requests as `Authorization: Bearer {access_token}`.
 
-**NOTE:** the <HashLink to='#id-token'>access token</HashLink> will only work for the API and scopes for which you have previously initiated authorization. If you need additional scopes in the future, you will need to build a new authorization URL with the additional scopes and have the Veteran grant consent again.
+**NOTE:** the <HashLink to={{ ...location, hash: '#id-token' }}>access token</HashLink> will only work for the API and scopes for which you have previously initiated authorization. If you need additional scopes in the future, you will need to build a new authorization URL with the additional scopes and have the Veteran grant consent again.
 
 Use the `refresh_token` to obtain a new `access_token` after its expiry by sending the following request.
 
@@ -120,7 +124,7 @@ Use the `refresh_token` to obtain a new `access_token` after its expiry by sendi
 <CodeWrapper>
 
 ```http
-POST {{props.propObj.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2'}}/revoke HTTP/1.1
+POST {{props.propObj.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2/{api}/v1'}}/token HTTP/1.1
 Host: sandbox-api.va.gov
 Content-Type: application/x-www-form-urlencoded
 Authorization: Basic { base64 encoded *client_id* + ':' + *client_secret* }
@@ -139,7 +143,7 @@ The manage endpoint directs end users to a URL where they can view which applica
 <CodeWrapper>
 
 ```http
-POST {{props.propObj.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2'}}/token HTTP/1.1
+POST {{props.propObj.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2/{api}/v1'}}/manage HTTP/1.1
 Host: sandbox-api.va.gov
 ```
 
@@ -153,7 +157,7 @@ Clients may revoke their own `access_tokens` and `refresh_tokens` using the revo
 <CodeWrapper>
 
 ```http
-POST {{props.propObj.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2'}}/revoke HTTP/1.1
+POST {{props.propObj.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2/{api}/v1'}}/revoke HTTP/1.1
 Host: sandbox-api.va.gov
 Content-Type: application/x-www-form-urlencoded
 Authorization: Basic { base64 encoded *client_id* + ':' + *client_secret* }
@@ -167,7 +171,7 @@ token={ *access_token* }&token_type_hint=access_token
 <CodeWrapper>
 
 ```http
-POST {{props.propObj.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2'}}/revoke HTTP/1.1
+POST {{props.propObj.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2/{api}/v1'}}/revoke HTTP/1.1
 Host: sandbox-api.va.gov
 Content-Type: application/x-www-form-urlencoded
 Authorization: Basic { base64 encoded *client_id* + ':' + *client_secret* }
@@ -187,7 +191,7 @@ A user will be prompted only once to consent to each client&#39;s use of their d
 <CodeWrapper>
 
 ```http
-DELETE {{props.propObj.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2'}}/grants HTTP/1.1
+DELETE {{props.propObj.apiDef?.oAuthInfo?.baseAuthPath ?? '/oauth2/{api}/v1'}}/grants HTTP/1.1
 Host: sandbox-api.va.gov
 Content-Type: application/x-www-form-urlencoded
 
