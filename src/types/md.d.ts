@@ -4,12 +4,11 @@ declare module '*.mdx' {
    * accept more attributes than this type signature will allow. However, the precise definition
    * of those extra attributes is defined by the markdown-component-loader at runtime based on
    * configuration data.
-   * Adding 'propObj' so the mdx files are open to any props that are passed
    */
   interface MarkdownComponentProps {
+    [x: string]: unknown;
     className?: string;
     style?: Record<string, string>;
-    propObj?: unknown;
   }
 
   /**

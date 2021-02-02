@@ -19,12 +19,6 @@ const BuildingOIDCContent = (): JSX.Element => {
     selectedOption: selectedOAuthApi,
   };
 
-  const propObj = {
-    apiDef,
-    options: selectorProps.options,
-    selectedOption: selectorProps.selectedOption,
-  };
-
   return (
     <section aria-labelledby="building-oidc-apps">
       <SectionHeaderWrapper
@@ -49,9 +43,18 @@ const BuildingOIDCContent = (): JSX.Element => {
         </li>
       </ul>
 
-      <AuthCodeFlowContent propObj={propObj} />
+      <AuthCodeFlowContent
+        apiDef={apiDef}
+        options={selectorProps.options}
+        selectedOption={selectorProps.selectedOption}
+      />
 
-      <PKCEAuthContent propObj={propObj} />
+      <PKCEAuthContent
+        apiDef={apiDef}
+        options={selectorProps.options}
+        selectedOption={selectorProps.selectedOption}
+      />
+
     </section>
   );
 };
