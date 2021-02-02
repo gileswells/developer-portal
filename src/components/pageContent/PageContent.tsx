@@ -20,14 +20,10 @@ const PageContent = (): JSX.Element => {
   React.useEffect(() => {
     const prevPath: string | null = prevPathRef.current;
 
-    if (prevPath !== location.pathname || location.hash) {
+    if (prevPath !== location.pathname) {
       // Only focus and scroll if it's not an initial page load
       if (prevPath) {
         focusAndScroll(mainRef.current);
-      }
-      if (location.hash) {
-        const tempRef: HTMLAnchorElement | null = document.querySelector(location.hash);
-        focusAndScroll(tempRef);
       }
       prevPathRef.current = location.pathname;
     }
