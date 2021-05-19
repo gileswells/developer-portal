@@ -148,7 +148,7 @@
     "markdown-it-anchor": "^7.1.0",
     "mini-css-extract-plugin": "^1.4.0",
     "msw": "^0.28.1",
-    "node-sass": "^5.0.0",
+    "node-sass": "^6.0.0",
     "node-sass-tilde-importer": "^1.0.2",
     "optimize-css-assets-webpack-plugin": "^5.0.4",
     "postcss-flexbugs-fixes": "^4.1.0",
