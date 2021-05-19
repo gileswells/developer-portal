@@ -52,7 +52,7 @@
     "react-redux": "^7.2.3",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "react-router-hash-link": "^2.4.0",
+    "react-router-hash-link": "^2.4.3",
     "react-router-sitemap": "github:department-of-veterans-affairs/react-router-sitemap#0683f69f552ad06193158aca83f911326bf216dd",
     "react-scroll": "^1.8.2",
     "react-tabs": "^3.2.1",
