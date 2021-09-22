@@ -7,7 +7,7 @@ on:
     branches: [master]
 
 jobs:
-  'e2e tests':
+  e2e_tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -35,7 +35,7 @@ jobs:
       - name: Run e2e tests
         run: npm run test:e2e:ci
 
-  'unit tests':
+  unit_tests:
     runs-on: ubuntu-latest
 
     steps:
