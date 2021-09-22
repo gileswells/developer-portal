@@ -33,7 +33,7 @@ jobs:
         run: npm ci
 
   post_build:
-    runs_on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Trigger other tests
         run: |
