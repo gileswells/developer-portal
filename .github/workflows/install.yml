@@ -31,3 +31,8 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Trigger other tests
+        run: |
+          gh workflow run "NPM e2e tests" --ref ${GITHUB_REF##*/}
+          gh workflow run "NPM unit tests" --ref ${GITHUB_REF##*/}
