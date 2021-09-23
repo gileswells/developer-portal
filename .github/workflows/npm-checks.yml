@@ -155,3 +155,9 @@ jobs:
 
       - name: Run test
         run: npm run test:accessibility:ci
+
+  images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run test
+        run: ./prohibit_image_files.sh origin/master HEAD
