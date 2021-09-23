@@ -159,5 +159,6 @@ jobs:
   images:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Run test
         run: ./prohibit_image_files.sh origin/master HEAD
