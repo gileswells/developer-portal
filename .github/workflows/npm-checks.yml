@@ -157,6 +157,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          lfs: true
       - name: Cache node modules
         uses: actions/cache@v2
         env:
@@ -168,6 +170,8 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
+      - name: Checkout LFS objects
+        run: git lfs checkout
       - name: Setup node
         uses: actions/setup-node@v2
         with:
