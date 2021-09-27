@@ -116,8 +116,17 @@ jobs:
             ${{ runner.os }}-
       - name: Checkout LFS objects
         run: git lfs checkout
-      - name: Install fonts
-        run: sudo apt-get install -y fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst
+      - name: Install everything for Visual Regressions
+        run:
+          sudo apt-get update && sudo apt-get install -y libxss1 libxtst6 wget --no-install-recommends \
+          && sudo wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - \
+          && sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
+          && sudo apt-get update \
+          && sudo apt-get install -y google-chrome-unstable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst ttf-freefont \
+          --no-install-recommends \
+          && sudo rm -rf /var/lib/apt/lists/* \
+          && sudo apt-get purge --auto-remove -y curl \
+          && sudo rm -rf /src/*.deb
       - name: Setup node
         uses: actions/setup-node@v2
         with:
