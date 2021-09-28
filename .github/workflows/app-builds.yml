@@ -1,8 +1,8 @@
 name: App Builds
 
 on:
-  pull_request:
-    # branches: [master]
+  # pull_request:
+  # branches: [master]
 
 jobs:
   build:
