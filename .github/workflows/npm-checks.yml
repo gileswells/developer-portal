@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18
     steps:
       - uses: actions/checkout@v2
       - name: Cache node modules
@@ -32,7 +32,7 @@ jobs:
 
   e2e:
     needs: [build]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18
 
     steps:
       - uses: actions/checkout@v2
@@ -60,7 +60,7 @@ jobs:
 
   unit:
     needs: [build]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18
 
     steps:
       - uses: actions/checkout@v2
@@ -87,7 +87,7 @@ jobs:
         run: npm run test:unit:ci
 
   security:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18
 
     steps:
       - uses: actions/checkout@v2
@@ -97,7 +97,7 @@ jobs:
 
   visual:
     needs: [build]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18
 
     steps:
       - uses: actions/checkout@v2
@@ -127,7 +127,7 @@ jobs:
       - name: Install everything for Visual Regressions
         run: sudo apt-get install -y google-chrome-unstable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst --no-install-recommends
       - name: Install everything for Visual Regressions
-        run: sudo apt update && sudo apt install fonts-ttf-freefont
+        run: sudo apt-get install fonts-ttf-freefont
       - name: Install everything for Visual Regressions
         run: sudo rm -rf /var/lib/apt/lists/* \
           && sudo apt-get purge --auto-remove -y curl
@@ -145,7 +145,7 @@ jobs:
 
   lint:
     needs: [build]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18
 
     steps:
       - uses: actions/checkout@v2
@@ -173,7 +173,7 @@ jobs:
 
   accessibility:
     needs: [build]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18
 
     steps:
       - uses: actions/checkout@v2
@@ -200,7 +200,7 @@ jobs:
         run: npm run test:accessibility:ci
 
   images:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18
     steps:
       - uses: actions/checkout@v2
       - name: Run test
