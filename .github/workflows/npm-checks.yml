@@ -7,7 +7,7 @@ on:
     branches: [master]
 
 jobs:
-  build:
+  install:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -31,7 +31,7 @@ jobs:
         run: npm ci
 
   e2e:
-    needs: [build]
+    needs: [install]
     runs-on: ubuntu-latest
 
     steps:
@@ -59,7 +59,7 @@ jobs:
         run: npm run test:e2e:ci
 
   unit:
-    needs: [build]
+    needs: [install]
     runs-on: ubuntu-latest
 
     steps:
@@ -96,7 +96,6 @@ jobs:
         run: npm audit --audit-level high
 
   visual:
-    needs: [build]
     runs-on: ubuntu-latest
 
     steps:
@@ -131,7 +130,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v2
         with:
-          node-version: 16
+          node-version: 12
 
       - name: Install dependencies
         run: npm ci
@@ -140,7 +139,7 @@ jobs:
         run: npm run test:visual
 
   lint:
-    needs: [build]
+    needs: [install]
     runs-on: ubuntu-latest
 
     steps:
@@ -168,7 +167,7 @@ jobs:
         run: npm run lint
 
   accessibility:
-    needs: [build]
+    needs: [install]
     runs-on: ubuntu-latest
 
     steps:
