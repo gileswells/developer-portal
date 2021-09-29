@@ -147,7 +147,7 @@ jobs:
           aws-region: us-gov-west-1
 
       - name: Upload failures
-        run: aws s3 cp --recursive /home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__/ s3://${{ secrets.AWS_S3_BUCKET }}/
+        run: aws s3 cp --recursive /home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__/ s3://bucket-vagov-elasticsearch-plugins-s3-upload/
 
   lint:
     needs: [install]
