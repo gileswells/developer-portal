@@ -143,8 +143,8 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_S3_URI: ${{ secrets.AWS_S3_URI }}
-        run: aws s3 cp /home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__/* ${{ secrets.AWS_S3_URI }}
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+        run: aws s3 cp --recursive /home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__/ s3://${{ secrets.AWS_S3_BUCKET }}/
 
   lint:
     needs: [install]
