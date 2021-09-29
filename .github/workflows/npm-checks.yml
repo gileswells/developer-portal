@@ -106,9 +106,6 @@ jobs:
         uses: actions/cache@v2
         env:
           cache-name: developer-portal-node-modules
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_S3_URI: ${{ secrets.AWS_S3_URI }}
         with:
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
@@ -143,6 +140,10 @@ jobs:
         continue-on-error: true
 
       - name: Upload failures
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_S3_URI: ${{ secrets.AWS_S3_URI }}
         run: aws s3 cp /home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__/* ${{ secrets.AWS_S3_URI }}
 
   lint:
