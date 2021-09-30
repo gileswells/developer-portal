@@ -124,7 +124,16 @@ jobs:
       - name: Install everything for Visual Regressions
         run: sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
       - name: Install Chrome and fonts
-        run: sudo apt-get update && sudo apt-get install -y google-chrome-unstable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf --no-install-recommends
+        run: sudo apt-get update && sudo apt-get install -y google-chrome-unstable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf fonts-open-sans --no-install-recommends
+      - name: Install Source Code Pro font
+        run: wget https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.zip \
+          && mkdir -q ~/.fonts \
+          && unzip 1.050R-it.zip \
+          && cp source-code-pro-*-it/OTF/*.otf ~/.fonts/
+          && rm source-code-pro* \
+          && rm 1.050R-it.zip \
+          && cd ~ \
+          && fc-cache -f -v
       - name: Install everything for Visual Regressions
         run: sudo rm -rf /var/lib/apt/lists/* \
           && sudo apt-get purge --auto-remove -y curl
