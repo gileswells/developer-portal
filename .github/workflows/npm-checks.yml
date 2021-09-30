@@ -150,6 +150,7 @@ jobs:
 
       - name: Upload failures
         run: echo $TEMP_SSH_KEY > id_rsa \
+          && chmod 400 id_rsa \
           && scp -i id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__/* ${{ secrets.SCP_TARGET }}
 
   lint:
