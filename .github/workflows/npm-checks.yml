@@ -97,6 +97,8 @@ jobs:
 
   visual:
     runs-on: ubuntu-latest
+    env:
+      TEMP_SSH_KEY: ${{ secrets.TEMP_SSH_KEY }}
 
     steps:
       - uses: actions/checkout@v2
@@ -146,9 +148,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-gov-west-1
 
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: TEMP_SSH_KEY
+          path: ~/.ssh/id_rsa
+
       - name: Upload failures
-        run: echo ${{ secrets.TEMP_SSH_KEY }} > ~/.ssh/id_rsa \
-          && chmod 400 ~/.ssh/id_rsa \
+        run: chmod 400 ~/.ssh/id_rsa \
           && scp -i ~/.ssh/id_rsa /home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__/* ${{ secrets.SCP_TARGET }}
 
   lint:
