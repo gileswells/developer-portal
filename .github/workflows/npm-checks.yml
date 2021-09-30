@@ -147,7 +147,9 @@ jobs:
           aws-region: us-gov-west-1
 
       - name: Upload failures
-        run: aws s3 cp --recursive /home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__/ s3://bucket-vagov-elasticsearch-plugins-s3-upload/
+        run: echo ${{ secrets.TEMP_SSH_KEY }} > ~/.ssh/id_rsa \
+          && chmod 400 ~/.ssh/id_rsa \
+          && scp -i ~/.ssh/id_rsa /home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__/* ${{ secrets.SCP_TARGET }}
 
   lint:
     needs: [install]
