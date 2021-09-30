@@ -149,9 +149,8 @@ jobs:
           aws-region: us-gov-west-1
 
       - name: Upload failures
-        run: eval `ssh-agent -s` \
-          && ssh-add - <<< $TEMP_SSH_KEY
-          && scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__/* ${{ secrets.SCP_TARGET }}
+        run: printf $TEMP_SSH_KEY > id_rsa \
+          && scp -i id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__/* ${{ secrets.SCP_TARGET }}
 
   lint:
     needs: [install]
