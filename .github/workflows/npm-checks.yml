@@ -151,7 +151,7 @@ jobs:
       - name: Upload failures
         run: eval `ssh-agent -s` \
           && ssh-add - <<< $TEMP_SSH_KEY
-          && scp /home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__/* ${{ secrets.SCP_TARGET }}
+          && scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__/* ${{ secrets.SCP_TARGET }}
 
   lint:
     needs: [install]
