@@ -148,15 +148,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-gov-west-1
 
-      - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: TEMP_SSH_KEY
-          path: id_rsa
-
       - name: Upload failures
-        run: chmod 400 id_rsa \
-          && scp -i id_rsa /home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__/* ${{ secrets.SCP_TARGET }}
+        run: ssh-add - <<< "$TEMP_SSH_KEY"
+          && scp /home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__/* ${{ secrets.SCP_TARGET }}
 
   lint:
     needs: [install]
