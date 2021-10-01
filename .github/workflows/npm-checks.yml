@@ -128,7 +128,7 @@ jobs:
       - name: Install Source Code Pro font
         env:
           FONT_TARGET: /usr/share/fonts/adobe-fonts/source-code-pro
-        run: mkdir -p "$FONT_TARGET"; git clone --branch release --depth 1 https://github.com/adobe-fonts/source-code-pro.git $FONT_TARGET; fc-cache -f -v $FONT_TARGET
+        run: mkdir -p "$FONT_TARGET"; git clone --branch release --depth 1 https://github.com/adobe-fonts/source-code-pro.git $FONT_TARGET; fc-cache -f -v $FONT_TARGET; fc-list
       - name: Install Chrome and fonts
         run: sudo apt-get update && sudo apt-get install -y google-chrome-unstable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf fonts-open-sans --no-install-recommends
       - name: Install everything for Visual Regressions
