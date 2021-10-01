@@ -123,10 +123,12 @@ jobs:
         run: wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
       - name: Install everything for Visual Regressions
         run: sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
-      - name: Download Source Code Pro font
-        run: wget https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.zip
+      # - name: Download Source Code Pro font
+      #   run: wget https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.zip
       - name: Install Source Code Pro font
-        run: mkdir ~/.fonts; unzip 1.050R-it.zip; cp source-code-pro-*-it/OTF/*.otf ~/.fonts/; rm -rf source-code-pro*; rm 1.050R-it.zip; cd ~; fc-cache -f -v
+        env:
+          FONT_TARGET: ~/.local/share/fonts/adobe-fonts/source-code-pro
+        run: mkdir -p "$FONT_TARGET"; git clone --branch release --depth 1 https://github.com/adobe-fonts/source-code-pro.git $FONT_TARGET; fc-cache -f -v $FONT_TARGET
       - name: Install Chrome and fonts
         run: sudo apt-get update && sudo apt-get install -y google-chrome-unstable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf fonts-open-sans --no-install-recommends
       - name: Install everything for Visual Regressions
