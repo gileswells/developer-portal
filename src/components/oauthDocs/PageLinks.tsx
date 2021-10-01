@@ -6,7 +6,6 @@ import { APISelector } from '../apiSelector/APISelector';
 
 const PageLinks = (props: AuthCodeFlowContentProps): JSX.Element => (
   <>
-    <h1>Intentionally busted visual regression</h1>
     <p>
       This page walks you through the steps toward authorization and authentication for using OAuth
       APIs on the Lighthouse platform. We provide examples throughout this document that you can

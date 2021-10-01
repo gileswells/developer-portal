@@ -11,7 +11,12 @@ RUN apt-get update && apt-get install -y libxss1 libxtst6 wget --no-install-reco
   --no-install-recommends \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get purge --auto-remove -y curl \
-  && rm -rf /src/*.deb
+  && rm -rf /src/*.deb \
+  && mkdir -p /usr/share/fonts/adobe-fonts/source-code-pro \
+  && git clone --branch release --depth 1 https://github.com/adobe-fonts/source-code-pro.git /usr/share/fonts/adobe-fonts/source-code-pro \
+  && mkdir -p /usr/share/fonts/adobe-fonts/source-sans-pro \
+  && git clone --branch release --depth 1 https://github.com/adobe-fonts/source-sans-pro.git /usr/share/fonts/adobe-fonts/source-sans-pro \
+  && fc-cache -f -v /usr/share/fonts/adobe-fonts
 
 WORKDIR /application
 
