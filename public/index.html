@@ -7,15 +7,27 @@
          of ES3, making it webpack-compatible. -->
     <meta http-equiv="X-UA-Compatible" content="IE=11" />
 
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl+ '&gtm_auth=EVfhr6k93Fl16jzaZVCafQ&gtm_preview=env-2&gtm_cookies_win=x';f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-WZ6MXMD');</script>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="theme-color" content="#000000">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src =
+          'https://www.googletagmanager.com/gtm.js?id=' +
+          i +
+          dl +
+          '&gtm_auth=EVfhr6k93Fl16jzaZVCafQ&gtm_preview=env-2&gtm_cookies_win=x';
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', 'GTM-WZ6MXMD');
+    </script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="theme-color" content="#000000" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source%20Code%20Pro" />
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -28,13 +40,23 @@
     <title>VA API Platform</title>
 
     <!-- We participate in the US government’s analytics program. See the data at analytics.usa.gov. -->
-    <script async type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=VA" id="_fed_an_ua_tag"></script>
+    <script
+      async
+      type="text/javascript"
+      src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=VA"
+      id="_fed_an_ua_tag"
+    ></script>
   </head>
   <body>
     <noscript>
       You need to enable JavaScript to run this app.
 
-      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WZ6MXMD&gtm_auth=EVfhr6k93Fl16jzaZVCafQ&gtm_preview=env-2&gtm_cookies_win=x" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-WZ6MXMD&gtm_auth=EVfhr6k93Fl16jzaZVCafQ&gtm_preview=env-2&gtm_cookies_win=x"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe>
     </noscript>
     <div id="root"></div>
     <!--
@@ -47,7 +69,7 @@
       To begin the development, run `npm start`
       To create a production bundle, use `npm run build`
     -->
-    
+
     <!--
       search.usa.gov tag 
       enables type-ahead search in the search box and 
@@ -55,14 +77,14 @@
     -->
     <script type="text/javascript">
       //<![CDATA[
-            var usasearch_config = { siteHandle:"developer.va.gov" };
-      
-            var script = document.createElement("script");
-            script.type = "text/javascript";
-            script.src = "//search.usa.gov/javascripts/remote.loader.js";
-            document.getElementsByTagName("head")[0].appendChild(script);
-      
+      var usasearch_config = { siteHandle: 'developer.va.gov' };
+
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = '//search.usa.gov/javascripts/remote.loader.js';
+      document.getElementsByTagName('head')[0].appendChild(script);
+
       //]]>
-      </script>
+    </script>
   </body>
 </html>

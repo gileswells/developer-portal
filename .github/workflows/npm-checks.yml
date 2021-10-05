@@ -117,23 +117,15 @@ jobs:
             ${{ runner.os }}-
       - name: Checkout LFS objects
         run: git lfs checkout
-      - name: Install everything for Visual Regressions
+      - name: Update apt-get and install packages
         run: sudo apt-get update && sudo apt-get install -y libxss1 libxtst6 wget --no-install-recommends
-      - name: Install everything for Visual Regressions
+      - name: Install Google apt-get key
         run: wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-      - name: Install everything for Visual Regressions
+      - name: Install Google apt-get source
         run: sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
-      - name: Install Source Code Pro font
-        env:
-          FONT_TARGET: /usr/share/fonts/adobe-fonts/source-code-pro
-        run: mkdir -p "$FONT_TARGET"; git clone --branch release --depth 1 https://github.com/adobe-fonts/source-code-pro.git $FONT_TARGET; fc-cache -f -v $FONT_TARGET
-      - name: Install Source Sans Pro font
-        env:
-          FONT_TARGET: /usr/share/fonts/adobe-fonts/source-sans-pro
-        run: mkdir -p "$FONT_TARGET"; git clone --branch release --depth 1 https://github.com/adobe-fonts/source-sans-pro.git $FONT_TARGET; fc-cache -f -v $FONT_TARGET
       - name: Install Chrome and fonts
         run: sudo apt-get update && sudo apt-get install -y google-chrome-unstable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf fonts-open-sans --no-install-recommends
-      - name: Install everything for Visual Regressions
+      - name: Remove unnecessary files
         run: sudo rm -rf /var/lib/apt/lists/* \
           && sudo apt-get purge --auto-remove -y curl
           && sudo rm -rf /src/*.deb
@@ -159,7 +151,7 @@ jobs:
       - name: Upload failures
         run: eval `ssh-agent -s` \
           && ssh-add - <<< $TEMP_SSH_KEY
-          && scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__/* git@home.mediagearhead.com:image_diff
+          && scp -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__/* git@home.mediagearhead.com:image_diff
 
   lint:
     needs: [install]
