@@ -149,9 +149,16 @@ jobs:
           aws-region: us-gov-west-1
 
       - name: Upload failures
-        run: eval `ssh-agent -s` \
-          && ssh-add - <<< $TEMP_SSH_KEY
-          && scp -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__/* git@home.mediagearhead.com:image_diff
+        run: |
+          echo ${{ steps }}
+          echo ${{ steps.10.outcome }}
+          echo ${{ steps.11.outcome }}
+          if [ -d  "/home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__" ]
+          then
+            eval `ssh-agent -s`
+            ssh-add - <<< $TEMP_SSH_KEY
+            scp -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__/* git@home.mediagearhead.com:image_diff
+          fi
 
   lint:
     needs: [install]
