@@ -151,8 +151,8 @@ jobs:
       - name: Upload failures
         run: |
           echo ${{ steps }}
-          echo ${{ steps.10.outcome }}
-          echo ${{ steps.11.outcome }}
+          echo ${{ steps[10].outcome }}
+          echo ${{ steps[11].outcome }}
           if [ -d  "/home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__" ]
           then
             eval `ssh-agent -s`
