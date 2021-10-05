@@ -19,7 +19,6 @@ const PageLinks = (props: AuthCodeFlowContentProps): JSX.Element => (
     <h2 tabIndex={-1} id="on-this-page">
       On this Page:
     </h2>
-    <h1>banana</h1>
     <ul>
       <li>
         <HashLink to={{ ...location, hash: '#getting-started' }}>Getting Started</HashLink>
