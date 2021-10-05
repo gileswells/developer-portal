@@ -159,7 +159,7 @@ jobs:
           fi
 
       - name: Report Success/Failure
-        if: failure() && steps.visual_test.outcome == 'failure'
+        if: steps.visual_test.outcome == 'failure'
         run: exit 1
         # This is needed as a unique step to allow for image uploads after test:visual fails
 
