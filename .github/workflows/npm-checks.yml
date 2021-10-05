@@ -151,12 +151,19 @@ jobs:
 
       - name: Upload failures
         run: |
-          echo ${{ steps.visual_test.outcome }}
           if [ -d  "/home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__" ]
           then
             eval `ssh-agent -s`
             ssh-add - <<< $TEMP_SSH_KEY
             scp -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__/* git@home.mediagearhead.com:image_diff
+          fi
+
+      - name: Report Success/Failure
+        run: |
+          if [ "${{ steps.visual_test.outcome }}" eq "failure" ]
+          then
+            echo ${{ steps.visual_test.outputs }}
+            exit 1
           fi
 
   lint:
