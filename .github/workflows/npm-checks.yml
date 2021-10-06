@@ -7,31 +7,7 @@ on:
     branches: [master]
 
 jobs:
-  install:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Cache node modules
-        uses: actions/cache@v2
-        env:
-          cache-name: developer-portal-node-modules
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-      - name: Setup node
-        uses: actions/setup-node@v2
-        with:
-          node-version: 12
-
-      - name: Install dependencies
-        run: npm ci
-
   e2e:
-    needs: [install]
     runs-on: ubuntu-latest
 
     steps:
@@ -59,7 +35,6 @@ jobs:
         run: npm run test:e2e:ci
 
   unit:
-    needs: [install]
     runs-on: ubuntu-latest
 
     steps:
@@ -164,7 +139,6 @@ jobs:
         # This is needed as a unique step to allow for image uploads after test:visual fails
 
   lint:
-    needs: [install]
     runs-on: ubuntu-latest
 
     steps:
@@ -192,7 +166,6 @@ jobs:
         run: npm run lint
 
   accessibility:
-    needs: [install]
     runs-on: ubuntu-latest
 
     steps:
