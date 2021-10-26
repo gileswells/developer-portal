@@ -7,7 +7,7 @@ on:
     branches: [master]
 
 jobs:
-  build:
+  install:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -31,7 +31,7 @@ jobs:
         run: npm ci
 
   e2e:
-    needs: [build]
+    needs: [install]
     runs-on: ubuntu-latest
 
     steps:
@@ -59,7 +59,7 @@ jobs:
         run: npm run test:e2e:ci
 
   unit:
-    needs: [build]
+    needs: [install]
     runs-on: ubuntu-latest
 
     steps:
@@ -96,7 +96,7 @@ jobs:
         run: npm audit --production --audit-level high
 
   lint:
-    needs: [build]
+    needs: [install]
     runs-on: ubuntu-latest
 
     steps:
@@ -124,7 +124,7 @@ jobs:
         run: npm run lint
 
   accessibility:
-    needs: [build]
+    needs: [install]
     runs-on: ubuntu-latest
 
     steps:

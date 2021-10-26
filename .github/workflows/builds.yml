@@ -1,0 +1,84 @@
+name: Build Pull Request Deployment Packages
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: developer-portal-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12
+
+      - name: Install dependencies
+        run: npm ci
+
+  builds:
+    needs: [install]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: ['dev', 'staging', 'production']
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Print env
+        run: printenv
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: developer-portal-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Build
+        env:
+          NODE_ENV: production
+          BUILD_ENV: ${{matrix.environment}}
+          REACT_APP_COMMIT_HASH: ${{github.ref}}
+        run: npm run build production
+
+      - name: Add deploy.json
+        env:
+          BUILD_ENV: ${{matrix.environment}}
+          REACT_APP_COMMIT_HASH: ${{github.ref}}
+        run: |
+          date > ./current-date
+          echo '{' > build/$BUILD_ENV/deploy.json
+          echo "  \"environment\": \"$BUILD_ENV\"," >> build/$BUILD_ENV/deploy.json
+          echo "  \"date\": \"$( cat current-date )\"," >> build/$BUILD_ENV/deploy.json
+          echo "  \"commit\": \"$REACT_APP_COMMIT_HASH\"" >> build/$BUILD_ENV/deploy.json
+          echo '}' >> build/$BUILD_ENV/deploy.json
+          rm ./current-date
+
+      - name: Upload to PR review s3 bucket
+        run: aws s3 sync --no-progress --acl public-read build/ s3://${S3_REVIEW_BUCKET}/${COMMIT_HASH}/
