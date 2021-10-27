@@ -64,13 +64,14 @@ jobs:
         env:
           NODE_ENV: production
           BUILD_ENV: ${{matrix.environment}}
-          REACT_APP_COMMIT_HASH: ${{github.event.pull_request.head.sha}}
+          REACT_APP_COMMIT_HASH: ${{github.event.pull_request.head.sha}} || ${{github.event.head}}
         run: npm run build $BUILD_ENV
 
       - name: Add deploy.json
         env:
           BUILD_ENV: ${{matrix.environment}}
           REACT_APP_COMMIT_HASH: ${{github.event.pull_request.head.sha}}
+          REACT_APP_COMMIT_HASH: ${{github.event.pull_request.head.sha}} || ${{github.event.head}}
         run: |
           date > ./current-date
           echo '{' > build/$BUILD_ENV/deploy.json
