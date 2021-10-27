@@ -65,9 +65,7 @@ jobs:
           NODE_ENV: production
           BUILD_ENV: ${{matrix.environment}}
           REACT_APP_COMMIT_HASH: ${{github.ref}}
-        run: |
-          $REACT_APP_COMMIT_HASH = $(git rev-parse --short "$GITHUB_SHA")
-          npm run build $BUILD_ENV
+        run: npm run build $BUILD_ENV
 
       - name: Add deploy.json
         env:
