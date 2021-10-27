@@ -90,7 +90,7 @@ jobs:
           role-to-assume: ${{secrets.AWS_ROLE_ARN}}
 
       - name: Upload to PR review s3 bucket
-        with:
+        env:
           COMMIT_HASH: ${{github.event.pull_request.head.sha}}
           S3_REVIEW_BUCKET: ${{secrets.AWS_S3_REVIEW_BUCKET}}
         run: aws s3 sync --no-progress --acl public-read build/ s3://$S3_REVIEW_BUCKET/$COMMIT_HASH/
