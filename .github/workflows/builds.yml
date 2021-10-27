@@ -64,7 +64,7 @@ jobs:
         env:
           NODE_ENV: production
           BUILD_ENV: ${{matrix.environment}}
-          REACT_APP_COMMIT_HASH: ${{github.event.pull_request.head.sha}} || ${{github.event.head}}
+          REACT_APP_COMMIT_HASH: ${{github.event.pull_request.head.sha}}
         run: npm run build $BUILD_ENV
 
       - name: Add deploy.json
@@ -81,5 +81,16 @@ jobs:
           rm ./current-date
           cat build/$BUILD_ENV/deploy.json
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-region: ${{secrets.AWS_REGION}}
+          role-to-assume: ${{secrets.AWS_ROLE_ARN}}
+
       - name: Upload to PR review s3 bucket
-        run: aws s3 sync --no-progress --acl public-read build/ s3://${S3_REVIEW_BUCKET}/${COMMIT_HASH}/
+        with:
+          COMMIT_HASH: ${{github.event.pull_request.head.sha}}
+          S3_REVIEW_BUCKET: ${{secrets.AWS_S3_REVIEW_BUCKET}}
+        run: aws s3 sync --no-progress --acl public-read build/ s3://$S3_REVIEW_BUCKET/$COMMIT_HASH/
