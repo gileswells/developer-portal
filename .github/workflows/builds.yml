@@ -71,7 +71,6 @@ jobs:
         env:
           BUILD_ENV: ${{matrix.environment}}
           REACT_APP_COMMIT_HASH: ${{github.event.pull_request.head.sha}}
-          REACT_APP_COMMIT_HASH: ${{github.event.pull_request.head.sha}} || ${{github.event.head}}
         run: |
           date > ./current-date
           echo '{' > build/$BUILD_ENV/deploy.json
