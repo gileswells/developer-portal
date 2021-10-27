@@ -67,8 +67,8 @@ jobs:
           REACT_APP_COMMIT_HASH: ${{github.ref}}
         run: |
           npm run build production
-          ls -la builds
-          ls -la builds $BUILD_ENV
+          ls -la build
+          ls -la build $BUILD_ENV
 
       - name: Add deploy.json
         env:
