@@ -65,7 +65,9 @@ jobs:
           NODE_ENV: production
           BUILD_ENV: ${{matrix.environment}}
           REACT_APP_COMMIT_HASH: ${{github.ref}}
-        run: npm run build production
+        run: |
+          npm run build production
+          ls -la
 
       - name: Add deploy.json
         env:
