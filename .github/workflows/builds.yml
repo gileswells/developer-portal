@@ -70,8 +70,10 @@ jobs:
       - name: Add deploy.json
         env:
           BUILD_ENV: ${{matrix.environment}}
-          REACT_APP_COMMIT_HASH: $(git rev-parse --short "${{github.ref}}")
         run: |
+          $REACT_APP_COMMIT_HASH=$(git rev-parse --short "${{github.ref}}")
+          git rev-parse --short "${{github.ref}}"
+          echo $REACT_APP_COMMIT_HASH
           date > ./current-date
           echo '{' > build/$BUILD_ENV/deploy.json
           echo "  \"environment\": \"$BUILD_ENV\"," >> build/$BUILD_ENV/deploy.json
