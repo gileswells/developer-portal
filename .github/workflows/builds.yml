@@ -22,7 +22,7 @@ jobs:
         env:
           S3_REVIEW_BUCKET: ${{secrets.AWS_S3_REVIEW_BUCKET}}
         run: |
-          aws sts get-caller-information
+          aws sts get-caller-identity
           aws s3 ls $S3_REVIEW_BUCKET
 
       - uses: actions/checkout@v2
