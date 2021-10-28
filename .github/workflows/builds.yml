@@ -22,6 +22,7 @@ jobs:
         env:
           S3_REVIEW_BUCKET: ${{secrets.AWS_S3_REVIEW_BUCKET}}
         run: |
+          ls -la ~/.aws/
           aws sts get-caller-identity
           aws configure get region
           aws s3 ls $S3_REVIEW_BUCKET/*
