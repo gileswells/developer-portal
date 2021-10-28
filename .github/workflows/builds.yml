@@ -26,8 +26,7 @@ jobs:
         run: |
           printenv
           aws sts get-caller-identity
-          aws configure get region
-          aws s3 ls $S3_REVIEW_BUCKET/*
+          aws s3 ls $S3_REVIEW_BUCKET/0035ce7/
 
       - uses: actions/checkout@v2
       - name: Cache node modules
