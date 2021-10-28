@@ -22,9 +22,9 @@ jobs:
         env:
           S3_REVIEW_BUCKET: ${{secrets.AWS_S3_REVIEW_BUCKET}}
         run: |
-          ls -la ~/.aws/
+          printenv
           aws sts get-caller-identity
-          aws configure get region
+          aws configure get profile.default.region
           aws s3 ls $S3_REVIEW_BUCKET/*
 
       - uses: actions/checkout@v2
