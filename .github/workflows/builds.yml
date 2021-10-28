@@ -107,7 +107,7 @@ jobs:
         run: |
           git_short_hash=$(git rev-parse --short "$COMMIT_HASH")
           aws s3 sync --no-progress --acl public-read build/ s3://$S3_REVIEW_BUCKET/gha-$git_short_hash/
-  builds:
+  pr_comment:
     needs: [builds]
     runs-on: ubuntu-latest
 
