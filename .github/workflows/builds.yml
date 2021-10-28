@@ -68,6 +68,7 @@ jobs:
           S3_REVIEW_BUCKET: ${{secrets.AWS_S3_REVIEW_BUCKET}}
           PREVIEW_SENTRY_DSN: ${{secrets.PREVIEW_SENTRY_DSN}}
         run: |
+          echo $COMMIT_HASH
           git_short_hash=$(git rev-parse --short "$COMMIT_HASH")
           cat <<EOF > .env.$BUILD_ENV.local
             PUBLIC_URL=/$S3_REVIEW_BUCKET/$git_short_hash/$BUILD_ENV
@@ -105,6 +106,7 @@ jobs:
           COMMIT_HASH: ${{github.event.pull_request.head.sha}}
           S3_REVIEW_BUCKET: ${{secrets.AWS_S3_REVIEW_BUCKET}}
         run: |
+          echo $COMMIT_HASH
           git_short_hash=$(git rev-parse --short "$COMMIT_HASH")
           aws s3 sync --no-progress --acl public-read build/ s3://$S3_REVIEW_BUCKET/gha-$git_short_hash/
   pr_comment:
@@ -120,6 +122,7 @@ jobs:
           S3_REVIEW_BUCKET: ${{secrets.AWS_S3_REVIEW_BUCKET}}
           PRNUM: ${{github.event.issue.number}}
         run: |
+          echo $COMMIT_HASH
           git_short_hash=$(git rev-parse --short "$COMMIT_HASH")
           links=""
           for env in ['dev', 'staging', 'production']; do
