@@ -26,6 +26,7 @@ jobs:
         run: |
           printenv
           aws sts get-caller-identity
+          aws condigure get region
           aws s3 ls $S3_REVIEW_BUCKET/*
 
       - uses: actions/checkout@v2
