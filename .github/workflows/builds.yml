@@ -20,11 +20,12 @@ jobs:
 
       - name: Upload to PR review s3 bucket
         env:
+          AWS_DEFAULT_REGION: ${{secrets.AWS_REGION}}
+          AWS_REGION: ${{secrets.AWS_REGION}}
           S3_REVIEW_BUCKET: ${{secrets.AWS_S3_REVIEW_BUCKET}}
         run: |
           printenv
           aws sts get-caller-identity
-          aws configure get profile.default.region
           aws s3 ls $S3_REVIEW_BUCKET/*
 
       - uses: actions/checkout@v2
