@@ -8,26 +8,6 @@ jobs:
   install:
     runs-on: ubuntu-latest
     steps:
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
-          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-          aws-region: ${{secrets.AWS_REGION}}
-          role-to-assume: ${{secrets.AWS_ROLE_ARN}}
-          role-duration-seconds: 1200
-          role-session-name: GitHubActions
-
-      - name: Upload to PR review s3 bucket
-        env:
-          AWS_DEFAULT_REGION: ${{secrets.AWS_REGION}}
-          AWS_REGION: ${{secrets.AWS_REGION}}
-          S3_REVIEW_BUCKET: ${{secrets.AWS_S3_REVIEW_BUCKET}}
-        run: |
-          printenv
-          aws sts get-caller-identity
-          aws s3 ls $S3_REVIEW_BUCKET/0035ce7/
-
       - uses: actions/checkout@v2
       - name: Cache node modules
         uses: actions/cache@v2
@@ -109,10 +89,12 @@ jobs:
           aws-region: ${{secrets.AWS_REGION}}
           role-to-assume: ${{secrets.AWS_ROLE_ARN}}
           role-duration-seconds: 1200
-          role-session-name: GitHubActionsDeveloperPortalPullRequestBuildUploads
+          role-session-name: GitHubActions
 
       - name: Upload to PR review s3 bucket
         env:
           COMMIT_HASH: ${{github.event.pull_request.head.sha}}
           S3_REVIEW_BUCKET: ${{secrets.AWS_S3_REVIEW_BUCKET}}
-        run: aws s3 sync --no-progress --acl public-read build/ s3://$S3_REVIEW_BUCKET/$COMMIT_HASH/
+        run: |
+          git_short_hash=$(git rev-parse --short "COMMIT_HASH")
+          aws s3 sync --no-progress --acl public-read build/ s3://$S3_REVIEW_BUCKET/gha-$git_short_hash/
