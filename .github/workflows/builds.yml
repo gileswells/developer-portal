@@ -16,14 +16,14 @@ jobs:
           aws-region: ${{secrets.AWS_REGION}}
           role-to-assume: ${{secrets.AWS_ROLE_ARN}}
           role-duration-seconds: 1200
-          role-session-name: GitHubActionsDeveloperPortalPullRequestBuildUploads
+          role-session-name: GitHubActions
 
       - name: Upload to PR review s3 bucket
         env:
           S3_REVIEW_BUCKET: ${{secrets.AWS_S3_REVIEW_BUCKET}}
         run: |
           aws sts get-caller-identity
-          aws s3 ls $S3_REVIEW_BUCKET
+          aws s3 ls $S3_REVIEW_BUCKET/*
 
       - uses: actions/checkout@v2
       - name: Cache node modules
