@@ -25,18 +25,20 @@ jobs:
     steps:
       - id: receiving
         name: Receive git hash
-        run: echo ${{ needs.sender.outputs.hash }}
+        run: echo ${{ needs.install.outputs.hash }}
 
   install:
     runs-on: ubuntu-latest
     outputs:
-      githash: ${{ steps.githash.outputs.hash }}
+      hash: ${{ steps.githash.outputs.hash }}
     steps:
       - uses: actions/checkout@v2
 
       - id: githash
-        name: Git log?
-        run: echo "::set-output name=hash::$(/bin/bash -c 'git log --oneline | cut -f3 -d " " | cut -c1-7')"
+        name: Set git hash
+        run: |
+          GIT_HASH=$(/bin/bash -c "git log --oneline | cut -f3 -d \" \" | cut -c1-7")
+          echo "::set-output name=hash::$GIT_HASH"
 
       - name: Cache node modules
         uses: actions/cache@v2
@@ -70,9 +72,6 @@ jobs:
       - name: Print env
         run: printenv
 
-      - name: Git log?
-        run: git log | head 20
-
       - name: Cache node modules
         uses: actions/cache@v2
         env:
@@ -96,14 +95,12 @@ jobs:
         env:
           NODE_ENV: production
           BUILD_ENV: ${{matrix.environment}}
-          REACT_APP_COMMIT_HASH: ${{github.event.pull_request.head.sha}}
+          REACT_APP_COMMIT_HASH: ${{needs.install.outputs.hash}}
           S3_REVIEW_BUCKET: ${{secrets.AWS_S3_REVIEW_BUCKET}}
           PREVIEW_SENTRY_DSN: ${{secrets.PREVIEW_SENTRY_DSN}}
         run: |
-          echo $COMMIT_HASH
-          git_short_hash=$(git rev-parse --short "$COMMIT_HASH")
           cat <<EOF > .env.$BUILD_ENV.local
-            PUBLIC_URL=/$S3_REVIEW_BUCKET/$git_short_hash/$BUILD_ENV
+            PUBLIC_URL=/$S3_REVIEW_BUCKET/$REACT_APP_COMMIT_HASH/$BUILD_ENV
             REACT_APP_SENTRY_DSN=$PREVIEW_SENTRY_DSN
             EOF
           done
@@ -112,7 +109,7 @@ jobs:
       - name: Add deploy.json
         env:
           BUILD_ENV: ${{matrix.environment}}
-          REACT_APP_COMMIT_HASH: ${{github.event.pull_request.head.sha}}
+          REACT_APP_COMMIT_HASH: ${{needs.install.outputs.hash}}
         run: |
           date > ./current-date
           echo '{' > build/$BUILD_ENV/deploy.json
@@ -135,12 +132,10 @@ jobs:
 
       - name: Upload to PR review s3 bucket
         env:
-          COMMIT_HASH: ${{github.event.pull_request.head.sha}}
+          COMMIT_HASH: ${{needs.install.outputs.hash}}
           S3_REVIEW_BUCKET: ${{secrets.AWS_S3_REVIEW_BUCKET}}
         run: |
-          echo $COMMIT_HASH
-          git_short_hash=$(git rev-parse --short "$COMMIT_HASH")
-          aws s3 sync --no-progress --acl public-read build/ s3://$S3_REVIEW_BUCKET/gha-$git_short_hash/
+          aws s3 sync --no-progress --acl public-read build/ s3://$S3_REVIEW_BUCKET/gha-$COMMIT_HASH/
   pr_comment:
     needs: [builds]
     runs-on: ubuntu-latest
@@ -150,15 +145,13 @@ jobs:
 
       - name: Add PR builds comment
         env:
-          COMMIT_HASH: ${{github.event.pull_request.head.sha}}
+          COMMIT_HASH: ${{needs.install.outputs.hash}}
           S3_REVIEW_BUCKET: ${{secrets.AWS_S3_REVIEW_BUCKET}}
           PRNUM: ${{github.event.issue.number}}
         run: |
-          echo $COMMIT_HASH
-          git_short_hash=$(git rev-parse --short "$COMMIT_HASH")
           links=""
           for env in ['dev', 'staging', 'production']; do
-            links="$links - [${env}](https://s3-us-gov-west-1.amazonaws.com/$S3_REVIEW_BUCKET/$git_short_hash/$env/index.html) <br>"
+            links="$links - [${env}](https://s3-us-gov-west-1.amazonaws.com/$S3_REVIEW_BUCKET/$GIT_HASH/$env/index.html) <br>"
           done
           echo $links;
           comment="These changes have been deployed to an s3 bucket. A build for each environment is available: <br><br> ${links} <br> due to s3 website hosting limitations in govcloud you need to first navigate to index.html explicitly."
