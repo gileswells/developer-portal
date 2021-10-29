@@ -5,13 +5,35 @@ on:
     branches: [master]
 
 jobs:
-  install:
+  sender:
     runs-on: ubuntu-latest
+    outputs:
+      githash: ${{ steps.githash.outputs.hash }}
     steps:
       - uses: actions/checkout@v2
 
-      - name: Git log?
-        run: /bin/bash -c "git log --oneline"
+      - id: sending
+        name: Send git hash
+        run: echo "::set-output name=hash::$(/bin/bash -c 'git log --oneline | cut -f3 -d " " | cut -c1-7')"
+
+  receiver:
+    runs-on: ubuntu-latest
+    needs: [sender]
+    steps:
+      - id: receiving
+        name: Receive git hash
+        run: echo ${{ needs.sender.outputs.githash }}
+
+  install:
+    runs-on: ubuntu-latest
+    outputs:
+      githash: ${{ steps.githash.outputs.hash }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - id: githash
+        name: Git log?
+        run: echo "::set-output name=hash::$(/bin/bash -c 'git log --oneline | cut -f3 -d " " | cut -c1-7')"
 
       - name: Cache node modules
         uses: actions/cache@v2
