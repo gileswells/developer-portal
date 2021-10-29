@@ -8,7 +8,7 @@ jobs:
   sender:
     runs-on: ubuntu-latest
     outputs:
-      githash: ${{ steps.sending.outputs.hash }}
+      hash: ${{ steps.sending.outputs.hash }}
     steps:
       - uses: actions/checkout@v2
 
@@ -24,7 +24,7 @@ jobs:
     steps:
       - id: receiving
         name: Receive git hash
-        run: echo ${{ needs.sender.outputs.githash }}
+        run: echo ${{ needs.sender.outputs.hash }}
 
   install:
     runs-on: ubuntu-latest
