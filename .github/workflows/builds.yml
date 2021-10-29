@@ -14,7 +14,7 @@ jobs:
 
       - id: sending
         name: Send git hash
-        run: echo "::set-output name=hash::$(/bin/bash -c 'git log --oneline | cut -f3 -d " " | cut -c1-7')"
+        run: echo "::set-output name=hash::$(/bin/bash -c 'git log --oneline | cut -f3 -d \" \" | cut -c1-7')"
 
   receiver:
     runs-on: ubuntu-latest
