@@ -9,6 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Git log?
+        run: git log | head 20
+
       - name: Cache node modules
         uses: actions/cache@v2
         env:
