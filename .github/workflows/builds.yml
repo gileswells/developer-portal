@@ -41,6 +41,9 @@ jobs:
       - name: Print env
         run: printenv
 
+      - name: Git log?
+        run: git log | head 20
+
       - name: Cache node modules
         uses: actions/cache@v2
         env:
