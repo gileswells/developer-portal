@@ -8,7 +8,7 @@ jobs:
   sender:
     runs-on: ubuntu-latest
     outputs:
-      githash: ${{ steps.githash.outputs.hash }}
+      githash: ${{ steps.sending.outputs.hash }}
     steps:
       - uses: actions/checkout@v2
 
