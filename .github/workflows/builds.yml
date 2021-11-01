@@ -135,9 +135,9 @@ jobs:
         run: |
           links=""
           for env in ['dev' 'staging' 'production']; do
-            links="$links - [${env}](https://s3-us-gov-west-1.amazonaws.com/$S3_REVIEW_BUCKET/gha-$GIT_HASH/$env/index.html) <br>"
+            links="$links - [${env}](https://s3-us-gov-west-1.amazonaws.com/$S3_REVIEW_BUCKET/gha-$COMMIT_HASH/$env/index.html) <br />"
           done
           echo $links;
-          comment="These changes have been deployed to an s3 bucket. A build for each environment is available: <br><br> ${links} <br> due to s3 website hosting limitations in govcloud you need to first navigate to index.html explicitly."
+          comment="These changes have been deployed to an s3 bucket. A build for each environment is available: <br /><br /> ${links} <br /> due to s3 website hosting limitations in govcloud you need to first navigate to index.html explicitly."
           echo $PR_NUMBER
           gh pr comment $PR_NUMBER --body "$comment"
