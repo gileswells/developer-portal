@@ -123,6 +123,7 @@ jobs:
           COMMIT_HASH: ${{needs.install.outputs.hash}}
           S3_REVIEW_BUCKET: ${{secrets.AWS_S3_REVIEW_BUCKET}}
           PRNUM: ${{github.event.issue.number}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: |
           links=""
           for env in ['dev', 'staging', 'production']; do
@@ -130,5 +131,4 @@ jobs:
           done
           echo $links;
           comment="These changes have been deployed to an s3 bucket. A build for each environment is available: <br><br> ${links} <br> due to s3 website hosting limitations in govcloud you need to first navigate to index.html explicitly."
-          gh auth login
           gh pr comment $PRNUM --body "$comment"
