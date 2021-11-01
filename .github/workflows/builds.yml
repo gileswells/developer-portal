@@ -77,11 +77,8 @@ jobs:
           S3_REVIEW_BUCKET: ${{secrets.AWS_S3_REVIEW_BUCKET}}
           PREVIEW_SENTRY_DSN: ${{secrets.PREVIEW_SENTRY_DSN}}
         run: |
-          /bin/bash cat <<EOF > .env.$BUILD_ENV.local
-            PUBLIC_URL=/$S3_REVIEW_BUCKET/$REACT_APP_COMMIT_HASH/$BUILD_ENV
-            REACT_APP_SENTRY_DSN=$PREVIEW_SENTRY_DSN
-            EOF
-          done
+          echo "PUBLIC_URL=/$S3_REVIEW_BUCKET/$REACT_APP_COMMIT_HASH/$BUILD_ENV" > .env.$BUILD_ENV.local
+          echo "REACT_APP_SENTRY_DSN=$PREVIEW_SENTRY_DSN" >> .env.$BUILD_ENV.local
           npm run build $BUILD_ENV
 
       - name: Add deploy.json
