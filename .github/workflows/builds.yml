@@ -85,7 +85,7 @@ jobs:
           S3_REVIEW_BUCKET: ${{secrets.AWS_S3_REVIEW_BUCKET}}
           PREVIEW_SENTRY_DSN: ${{secrets.PREVIEW_SENTRY_DSN}}
         run: |
-          echo "PUBLIC_URL=/$S3_REVIEW_BUCKET/$REACT_APP_COMMIT_HASH/$BUILD_ENV" > .env.$BUILD_ENV.local
+          echo "PUBLIC_URL=/$S3_REVIEW_BUCKET/gha-$REACT_APP_COMMIT_HASH/$BUILD_ENV" > .env.$BUILD_ENV.local
           echo "REACT_APP_SENTRY_DSN=$PREVIEW_SENTRY_DSN" >> .env.$BUILD_ENV.local
           npm run build $BUILD_ENV
 
@@ -134,7 +134,7 @@ jobs:
           PR_NUMBER: ${{needs.install.outputs.pr_number}}
         run: |
           links=""
-          for env in ['dev' 'staging' 'production']; do
+          for env in [ 'dev' 'staging' 'production' ]; do
             links="$links - [${env}](https://s3-us-gov-west-1.amazonaws.com/$S3_REVIEW_BUCKET/gha-$COMMIT_HASH/$env/index.html) <br />"
           done
           echo $links;
