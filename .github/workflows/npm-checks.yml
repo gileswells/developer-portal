@@ -9,8 +9,24 @@ on:
 jobs:
   install:
     runs-on: ubuntu-latest
+    outputs:
+      hash: ${{ steps.githash.outputs.hash }}
+      pr_number: ${{ steps.pr_number.outputs.pr }}
     steps:
       - uses: actions/checkout@v2
+
+      - id: pr_number
+        name: Get PR Number
+        run: |
+          PR_NUMBER=`printf $GITHUB_REF | sed 's|refs/pull/||' | sed 's|/merge||'`
+          echo $PR_NUMBER
+          echo "::set-output name=pr::$PR_NUMBER"
+
+      - id: githash
+        name: Set git hash
+        run: |
+          GIT_HASH=$(/bin/bash -c "git log --oneline | cut -f3 -d \" \" | cut -c1-7")
+          echo "::set-output name=hash::$GIT_HASH"
       - name: Cache node modules
         uses: actions/cache@v2
         env:
@@ -157,3 +173,81 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run test
         run: ./prohibit_image_files.sh origin/master HEAD
+
+  visual:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: developer-portal-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Checkout LFS objects
+        run: git lfs checkout
+      - name: Update apt-get and install packages
+        run: sudo apt-get update && sudo apt-get install -y libxss1 libxtst6 wget --no-install-recommends
+      - name: Install Google apt-get key
+        run: wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+      - name: Install Google apt-get source
+        run: sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
+      - name: Install Chrome and fonts
+        run: sudo apt-get update && sudo apt-get install -y google-chrome-unstable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf fonts-open-sans --no-install-recommends
+      - name: Remove unnecessary files
+        run: sudo rm -rf /var/lib/apt/lists/* \
+          && sudo apt-get purge --auto-remove -y curl
+          && sudo rm -rf /src/*.deb
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12
+
+      - name: Install dependencies
+        run: npm ci
+
+      - id: visual_test
+        name: Run test
+        run: npm run test:visual
+        continue-on-error: true
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-region: ${{secrets.AWS_REGION}}
+          role-to-assume: ${{secrets.AWS_ROLE_ARN}}
+          role-duration-seconds: 1200
+          role-session-name: GitHubActions
+
+      - name: Upload failures
+        env:
+          AWS_S3_SCREENSHOTS_BUCKET: ${{secrets.AWS_S3_SCREENSHOTS_BUCKET}}
+          COMMIT_HASH: ${{needs.install.outputs.hash}}
+        run: |
+          if [ -d  "/home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__" ]
+          then
+            aws s3 sync --no-progress --acl public-read /home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__/* s3://$AWS_S3_SCREENSHOTS_BUCKET/gha-$COMMIT_HASH/
+            report_path="test/image_snapshots/__diff_output__/"
+            links=""
+            for f in ${report_path}*; do
+              links="${links}[${f#"${report_path}"}](https://s3-us-gov-west-1.amazonaws.com/${S3_VISUAL_BUCKET}/${S3_BRANCH}/${COMMIT_HASH}/${f#"${report_path}"})"
+            done
+            aws s3 sync --no-progress ${report_path} s3://${S3_VISUAL_BUCKET}/${S3_BRANCH}/${COMMIT_HASH}/
+            docsLink="https://github.com/${REPO}/blob/master/docs/testing.md#visual-regression-testing"
+            comment="Visual regression testing failed. Review these diffs and then [update the snapshots](${docsLink}). <br><br> ${links}"
+            gh pr comment $PR_NUMBER --body "$comment"
+          fi
+      - name: Report Success/Failure
+        if: steps.visual_test.outcome == 'failure'
+        run: exit 1
+        # This is needed as a unique step to allow for image uploads after test:visual fails
