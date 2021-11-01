@@ -134,7 +134,7 @@ jobs:
           PR_NUMBER: ${{needs.install.outputs.pr_number}}
         run: |
           links=""
-          for env in [ 'dev' 'staging' 'production' ]; do
+          for env in 'dev' 'staging' 'production' ; do
             links="$links - [${env}](https://s3-us-gov-west-1.amazonaws.com/$S3_REVIEW_BUCKET/gha-$COMMIT_HASH/$env/index.html) <br />"
           done
           echo $links;
