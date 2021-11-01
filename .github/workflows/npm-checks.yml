@@ -234,15 +234,14 @@ jobs:
           AWS_S3_SCREENSHOTS_BUCKET: ${{secrets.AWS_S3_SCREENSHOTS_BUCKET}}
           COMMIT_HASH: ${{needs.install.outputs.hash}}
         run: |
-          if [ -d  "/home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__" ]
+          if [ -d  "test/image_snapshots/__diff_output__" ]
           then
-            aws s3 sync --no-progress --acl public-read /home/runner/work/developer-portal/developer-portal/test/image_snapshots/__diff_output__/* s3://$AWS_S3_SCREENSHOTS_BUCKET/gha-$COMMIT_HASH/
+            aws s3 sync --no-progress --acl public-read test/image_snapshots/__diff_output__/ s3://$AWS_S3_SCREENSHOTS_BUCKET/gha-$COMMIT_HASH/
             report_path="test/image_snapshots/__diff_output__/"
             links=""
             for f in ${report_path}*; do
               links="${links}[${f#"${report_path}"}](https://s3-us-gov-west-1.amazonaws.com/${S3_VISUAL_BUCKET}/${S3_BRANCH}/${COMMIT_HASH}/${f#"${report_path}"})"
             done
-            aws s3 sync --no-progress ${report_path} s3://${S3_VISUAL_BUCKET}/${S3_BRANCH}/${COMMIT_HASH}/
             docsLink="https://github.com/${REPO}/blob/master/docs/testing.md#visual-regression-testing"
             comment="Visual regression testing failed. Review these diffs and then [update the snapshots](${docsLink}). <br><br> ${links}"
             gh pr comment $PR_NUMBER --body "$comment"
