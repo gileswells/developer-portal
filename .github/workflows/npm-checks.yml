@@ -235,6 +235,7 @@ jobs:
           AWS_S3_SCREENSHOTS_BUCKET: ${{secrets.AWS_S3_SCREENSHOTS_BUCKET}}
           COMMIT_HASH: ${{needs.install.outputs.hash}}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          PR_NUMBER: ${{needs.install.outputs.pr_number}}
         run: |
           if [ -d  "test/image_snapshots/__diff_output__" ]
           then
