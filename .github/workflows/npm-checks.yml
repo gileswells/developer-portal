@@ -23,7 +23,7 @@ jobs:
         run: |
           NODE_VERSION=$(node -v)
           echo $NODE_VERSION
-          echo "::set-output node_version::$NODE_VERSION"
+          echo "::set-output name=node_version::$NODE_VERSION"
 
       - id: pr_number
         name: Get PR Number
