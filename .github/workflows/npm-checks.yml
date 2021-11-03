@@ -187,11 +187,12 @@ jobs:
     needs: [install]
     steps:
       - uses: actions/checkout@v2
+        with:
+          lfs: true
       - name: Setup node
         uses: actions/setup-node@v2
         with:
           node-version: 12
-          lfs: true
       - id: cache_node_modules
         name: Cache node modules
         uses: actions/cache@v2
