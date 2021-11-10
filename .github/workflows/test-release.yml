@@ -1,0 +1,23 @@
+name: Create new Developer Portal release package
+
+on:
+  push:
+    branches: [api-9848/fix-archive-download]
+
+jobs:
+  create_release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Create the release
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: |
+          NEW_TAG=$(git tag --sort=-creatordate | grep ^developer-portal | head -1 | awk -F. -v OFS=. '{$NF++;print}')
+          echo $NEW_TAG
+          VERSION=${NEW_TAG#"developer-portal/v"}
+          echo $VERSION
+          gh release create $NEW_TAG
