@@ -8,15 +8,22 @@ jobs:
   create_release:
     runs-on: ubuntu-latest
     steps:
+      - id: latest_release
+        name: Get latest release with tag
+        run: |
+          LATEST_RELEASE=$(curl -s https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest | jq '.tag_name' | sed 's/\"//g')
+          echo $LATEST_RELEASE
+          echo "::set-output name=tag::$LATEST_RELEASE"
+
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0
+          ref: ${{steps.latest_release.outputs.tag}}
 
       - name: Create the release
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: |
-          NEW_TAG=$(git tag --sort=-creatordate | grep ^developer-portal | head -1 | awk -F. -v OFS=. '{$NF++;print}')
+          NEW_TAG=$(git tag --sort=-creatordate | head -1 | awk -F. -v OFS=. '{$NF++;print}')
           echo $NEW_TAG
           VERSION=${NEW_TAG#"developer-portal/v"}
           echo $VERSION
