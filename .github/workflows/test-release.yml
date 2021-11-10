@@ -1,4 +1,4 @@
-name: Create new Developer Portal release package
+name: Test releases
 
 on:
   push:
