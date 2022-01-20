@@ -1,7 +1,7 @@
 name: Generate Visual Regressions
 
 on:
-  manual:
+  workflow_dispatch:
     inputs:
       pr_number:
         description: 'What PR number needs updated visual regressions?'
