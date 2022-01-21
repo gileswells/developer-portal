@@ -21,8 +21,7 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: |
           env;
-          gh auth login --with-token;
-          PR_BRANCH=`gh api repos/department-of-veterans-affairs/developer-portal/pulls/${{ inputs.pr_number }} --jq '.head.ref'`;
+          PR_BRANCH=`gh api --with-token repos/department-of-veterans-affairs/developer-portal/pulls/${{ inputs.pr_number }} --jq '.head.ref'`;
           echo $PR_BRANCH;
           echo echo "::set-output name=branch_name::$PR_BRANCH";
       - uses: actions/checkout@v2
