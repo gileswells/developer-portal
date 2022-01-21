@@ -17,12 +17,7 @@ jobs:
     steps:
       - id: pr_branch
         name: Determine PR branch
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: |
-          env;
-          gh auth status;
-          gh auth login --with-token;
           gh auth status;
           PR_BRANCH=`gh api repos/department-of-veterans-affairs/developer-portal/pulls/${{ inputs.pr_number }} --jq '.head.ref'`;
           echo $PR_BRANCH;
