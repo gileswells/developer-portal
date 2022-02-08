@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  search_and_validate_mr:
+  pre_mr_checks:
     runs-on: ubuntu-latest
     outputs:
       mr_number: ${{ steps.get_mr_number.outputs.mr_number }}
