@@ -20,7 +20,7 @@ jobs:
         name: Get time string for MR search
         run: |
           date '+%Y/%m/%d %H:%M ET' > ./time
-          TIME_STRING={{ printf ./time }}
+          TIME_STRING={{ cat ./time }}
           echo $TIME_STRING
           echo "::set-output name=time_string::$TIME_STRING"
       - name: Grab matching deploy MR
