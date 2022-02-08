@@ -27,7 +27,7 @@ jobs:
         run: |
           echo $TIME_STRING
           echo ${{ steps.get_time_string.outputs.time_string }}
-          TIME_STRING=`echo steps.get_time_string.outputs.time_string`
+          TIME_STRING=`echo ${{steps.get_time_string.outputs.time_string}}`
           echo $TIME_STRING
           gh issue list \
             -R 'gileswells/developer-portal' \
