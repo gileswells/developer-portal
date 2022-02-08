@@ -7,14 +7,19 @@ jobs:
   search_and_validate_mr:
     runs-on: ubuntu-latest
     outputs:
-      branch_name: ${{ steps.mr_number.outputs.mr_number }}
+      deploy_time_string: ${{ steps.get_time_string.outputs.time_string }}
     steps:
       - name: Set timezone to Eastern
         uses: szenius/set-timezone@v1.0
         with:
           timezoneLinux: 'America/New_York'
-      - name: Commit new snapshots and push
+      # - name: Debugging info
+      #   run: |
+      #     date '+%Y/%m/%d %H:%M ET'
+      - id: get_time_string
+        name: Get time string for MR search
         run: |
-          pwd
-          date '+%Y/%m/%d %H:%M ET'
-          printenv
+          date '+%Y/%M/%d %H:%m ET' > ./time
+          TIME_STRING={{ printf ./time }}
+          echo $TIME_STRING
+          echo "::set-output name=time_string::$PR_BRANCH"
