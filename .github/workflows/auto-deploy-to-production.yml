@@ -9,12 +9,12 @@ jobs:
     outputs:
       branch_name: ${{ steps.mr_number.outputs.mr_number }}
     steps:
-      # - name: Set timezone to Eastern
-      #   uses: szenius/set-timezone@v1.0
-      #   with:
-      #     timezoneLinux: "America/New_York"
+      - name: Set timezone to Eastern
+        uses: szenius/set-timezone@v1.0
+        with:
+          timezoneLinux: 'America/New_York'
       - name: Commit new snapshots and push
         run: |
           pwd
-          date '+%Y/%M/%d %H:%m ET'
+          date '+%Y/%m/%d %H:%M ET'
           printenv
