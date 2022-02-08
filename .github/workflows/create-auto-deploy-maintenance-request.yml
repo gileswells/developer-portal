@@ -1,4 +1,4 @@
-name: Auto Deploy master to Production
+name: Create Auto Deploy Maintenance Request
 
 on:
   workflow_dispatch:
