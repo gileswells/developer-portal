@@ -21,6 +21,7 @@ jobs:
         run: |
           date '+%Y/%m/%d %H:%M ET' > ./time
           TIME_STRING=`cat ./time`
+          rm ./time
           echo $TIME_STRING
           echo "::set-output name=time_string::$TIME_STRING"
       - name: Grab matching deploy MR
@@ -30,14 +31,14 @@ jobs:
           TIME_STRING=`echo ${{steps.get_time_string.outputs.time_string}}`
           echo $TIME_STRING
           echo ${{secrets.GITHUB_TOKEN}} | gh auth login --with-token
-          gh issue list \
-            -R 'gileswells/developer-portal' \
-            -l 'repo: developer-portal' \
-            --limit 1 \
-            --json id,number,state,labels,title \
-            --jq "[.[]|select(.title==\"Deploy developer-portal to production ($TIME_STRING)\")][0]" \
-            > issue.json
-          cat issue.json
+          # gh issue list \
+          #   -R 'gileswells/developer-portal' \
+          #   -l 'repo: developer-portal' \
+          #   --limit 1 \
+          #   --json id,number,state,labels,title \
+          #   --jq "[.[]|select(.title==\"Deploy developer-portal to production ($TIME_STRING)\")][0]" \
+          #   > issue.json
+          # cat issue.json
           TIME_STRING='2022/02/07 09:00 ET'
           gh issue list \
             -R 'gileswells/developer-portal' \
@@ -47,3 +48,4 @@ jobs:
             --jq "[.[]|select(.title==\"Deploy developer-portal to production ($TIME_STRING)\")][0]" \
             > issue.json
           cat issue.json
+          jq ".labels[.[]|select(.name==\"status: approved\")][0]" issue.json
