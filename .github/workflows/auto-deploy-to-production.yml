@@ -38,3 +38,12 @@ jobs:
             --jq "[.[]|select(.title==\"Deploy developer-portal to production ($TIME_STRING)\")][0]" \
             > issue.json
           cat issue.json
+          TIME_STRING='2022/02/07 09:00 ET'
+          gh issue list \
+            -R 'gileswells/developer-portal' \
+            -l 'repo: developer-portal' \
+            --limit 1 \
+            --json id,number,state,labels,title \
+            --jq "[.[]|select(.title==\"Deploy developer-portal to production ($TIME_STRING)\")][0]" \
+            > issue.json
+          cat issue.json
