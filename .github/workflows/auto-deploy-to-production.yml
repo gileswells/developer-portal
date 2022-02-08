@@ -49,6 +49,10 @@ jobs:
           cat issue.json
           MR_NUMBER=`jq -e ".number" issue.json`
           echo $MR_NUMBER
+          if [ "" == $MR_NUMBER ]; then
+            # If there's no MR_NUMBER then exit because there's no open MR to deploy
+            exit 1;
+          fi
           # If this errors, the MR isn't labeled "status: approved" at the time of it's scheduled deployment
           jq ".labels" issue.json | jq -e ".[] | select(.name==\"status: approved\")"
           echo "::set-output name=mr_number::$MR_NUMBER"
