@@ -37,4 +37,4 @@ jobs:
             --json id,number,state,labels,title \
             --jq "[.[]|select(.title==\"Deploy developer-portal to production ($TIME_STRING)\")][0]" \
             > issue.json
-          echo issue.json
+          cat issue.json
