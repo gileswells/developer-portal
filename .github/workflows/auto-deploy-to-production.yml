@@ -7,6 +7,7 @@ jobs:
   search_and_validate_mr:
     runs-on: ubuntu-latest
     outputs:
+      mr_number: ${{ steps.get_mr_number.outputs.mr_number }}
       time_string: ${{ steps.get_time_string.outputs.time_string }}
     steps:
       - name: Set timezone to Eastern
@@ -24,7 +25,8 @@ jobs:
           rm ./time
           echo $TIME_STRING
           echo "::set-output name=time_string::$TIME_STRING"
-      - name: Grab matching deploy MR
+      - id: get_mr_number
+        name: Grab matching deploy MR
         run: |
           echo $TIME_STRING
           echo ${{ steps.get_time_string.outputs.time_string }}
@@ -48,4 +50,25 @@ jobs:
             --jq "[.[]|select(.title==\"Deploy developer-portal to production ($TIME_STRING)\")][0]" \
             > issue.json
           cat issue.json
+          MR_NUMBER=`jq ".number issue.json"
+          # If this errors, the MR isn't labeled "status: approved" at the time of it's scheduled deployment
           jq ".labels" issue.json | jq -e ".[] | select(.name==\"status: approved\")"
+          echo "::set-output name=mr_number::$MR_NUMBER"
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-region: ${{secrets.AWS_REGION}}
+          role-to-assume: ${{secrets.AWS_ROLE_ARN}}
+          role-duration-seconds: 1200
+          role-session-name: GitHubActions
+
+      - name: Build dev and staging
+        run: |
+          MR_NUMBER=`echo ${{steps.get_mr_number.outputs.mr_number}}`
+          echo "aws codebuild start-build --project-name developer-portal-deploy --environment-variables-override name=RELEASE,environment=production,mr=$MR_NUMBER"
+          gh issue comment $MR_NUMBER -R 'gileswells/developer-portal' --body "TESTING: This is not actually deploying automatically. This is the command that would run to send the code to production.<br><br>\`aws codebuild start-build --project-name developer-portal-deploy --environment-variables-override name=RELEASE,environment=production,mr=$MR_NUMBER\`"
+          # Not actually deploying yet. Just testing.
+          # aws codebuild start-build --project-name developer-portal-deploy --environment-variables-override name=RELEASE,environment=production,mr=$MR_NUMBER
