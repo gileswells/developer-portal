@@ -1,0 +1,40 @@
+name: Auto Deploy master to Production
+
+on:
+  workflow_dispatch:
+
+jobs:
+  search_and_validate_mr:
+    runs-on: ubuntu-latest
+    outputs:
+      mr_number: ${{ steps.get_mr_number.outputs.mr_number }}
+      time_string: ${{ steps.get_time_string.outputs.time_string }}
+    steps:
+      - name: Set timezone to Eastern
+        uses: szenius/set-timezone@v1.0
+        with:
+          timezoneLinux: 'America/New_York'
+      - name: Check for existing MRs
+        run: |
+          echo ${{secrets.GITHUB_TOKEN}} | gh auth login --with-token
+          # gh issue list \
+          #   -R 'department-of-veterans-affairs/lighthouse-devops-support' \
+          #   -l 'repo: developer-portal' \
+          #   --limit 1 \
+          #   --json id,number,state,labels,title \
+          #   > issue.json
+          # cat issue.json
+          gh issue list \
+            -R 'gileswells/developer-portal' \
+            -l 'repo: developer-portal' \
+            --limit 1 \
+            --json id,number,state,labels,title \
+            > issue.json
+          cat issue.json
+          if [ "[]" == "$(cat issue.json)" ]; then
+            :
+          else
+            # issue.json isn't an empty json array and there is currently an open MR tagged "repo: developer-portal"
+            # Any open MR should cancel the creation of a new MR
+            exit 1;
+          fi
