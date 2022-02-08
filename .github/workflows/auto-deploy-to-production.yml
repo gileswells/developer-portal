@@ -29,6 +29,7 @@ jobs:
           echo ${{ steps.get_time_string.outputs.time_string }}
           TIME_STRING=`echo ${{steps.get_time_string.outputs.time_string}}`
           echo $TIME_STRING
+          echo ${{secrets.GITHUB_TOKEN}} | gh auth login --with-token
           gh issue list \
             -R 'gileswells/developer-portal' \
             -l 'repo: developer-portal' \
