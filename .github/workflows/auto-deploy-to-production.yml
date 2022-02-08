@@ -48,4 +48,4 @@ jobs:
             --jq "[.[]|select(.title==\"Deploy developer-portal to production ($TIME_STRING)\")][0]" \
             > issue.json
           cat issue.json
-          jq ".labels[.[]|select(.name==\"status: approved\")][0]" issue.json
+          jq ".labels" issue.json | jq ".[] | select(.name==\"status: approved\")"
