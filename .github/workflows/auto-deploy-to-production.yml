@@ -19,7 +19,21 @@ jobs:
       - id: get_time_string
         name: Get time string for MR search
         run: |
-          date '+%Y/%M/%d %H:%m ET' > ./time
+          date '+%Y/%m/%d %H:%M ET' > ./time
           TIME_STRING={{ printf ./time }}
           echo $TIME_STRING
-          echo "::set-output name=time_string::$PR_BRANCH"
+          echo "::set-output name=time_string::$TIME_STRING"
+      - name: Grab matching deploy MR
+        run: |
+          echo $TIME_STRING
+          echo ${{ steps.get_time_string.outputs.time_string }}
+          TIME_STRING={{ steps.get_time_string.outputs.time_string }}
+          echo $TIME_STRING
+          gh issue list \
+            -R 'gileswells/developer-portal' \
+            -l 'repo: developer-portal' \
+            --limit 1 \
+            --json id,number,state,labels,title \
+            --jq "[.[]|select(.title==\"Deploy developer-portal to production ($TIME_STRING)\")][0]" \
+            > issue.json
+          echo issue.json
