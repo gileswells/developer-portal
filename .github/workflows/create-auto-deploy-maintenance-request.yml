@@ -42,16 +42,16 @@ jobs:
         name: Get current release tag from production deploy.json
         run: |
           wget https://developer.va.gov/deploy.json
-          RELEASE_TAG=`jq ".release" deploy.json`
+          RELEASE_TAG=`jq -r ".release" deploy.json`
           echo $RELEASE_TAG
           echo "::set-output name=release_tag::$RELEASE_TAG"
       - id: get_current_release_from_commit_hash
         name: Get currently deployed release tag from the commit hash if last deploy didn't use the release tag
         if: steps.get_current_release_tag.outputs.release_tag == ''
         run: |
-          COMMIT_HASH=`jq ".commit" deploy.json`
+          COMMIT_HASH=`jq -r ".commit" deploy.json`
           echo $COMMIT_HASH
-          $RELEASE_TAG=`gh api /repos/department-of-veterans-affairs/developer-portal/tags | jq ".[] | select(.commit.sha == \"$COMMIT_HASH\").name"`
+          $RELEASE_TAG=`gh api /repos/department-of-veterans-affairs/developer-portal/tags | jq -r ".[] | select(.commit.sha == \"$COMMIT_HASH\").name"`
           echo $RELEASE_TAG
           echo "::set-output name=release_tag::$RELEASE_TAG"
       - id: unified_release_tag
