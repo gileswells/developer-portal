@@ -52,7 +52,7 @@ jobs:
         run: |
           COMMIT_HASH=`jq -r ".commit" deploy.json`
           echo $COMMIT_HASH
-          $RELEASE_TAG=`gh api /repos/department-of-veterans-affairs/developer-portal/tags | jq -r ".[] | select(.commit.sha == \"$COMMIT_HASH\").name"`
+          RELEASE_TAG=`gh api /repos/department-of-veterans-affairs/developer-portal/tags | jq -r ".[] | select(.commit.sha == \"$COMMIT_HASH\").name"`
           echo $RELEASE_TAG
           echo "::set-output name=release_tag::$RELEASE_TAG"
       - id: unified_release_tag
