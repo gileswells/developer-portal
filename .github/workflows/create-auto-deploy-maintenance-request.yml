@@ -47,7 +47,7 @@ jobs:
           echo "::set-output name=release_tag::$RELEASE_TAG"
       - id: get_current_release_from_commit_hash
         name: Get currently deployed release tag from the commit hash if last deploy didn't use the release tag
-        if: steps.get_current_release_tag.outputs.release_tag == ""
+        if: steps.get_current_release_tag.outputs.release_tag == ''
         run: |
           COMMIT_HASH=`jq ".commit" deploy.json`
           echo $COMMIT_HASH
