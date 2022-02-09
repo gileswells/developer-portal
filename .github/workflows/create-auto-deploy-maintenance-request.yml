@@ -57,7 +57,7 @@ jobs:
       - id: unified_release_tag
         name: Unify release tag regardless of how it was found
         run: |
-          if [ "" != "${{ steps.get_current_release_tag.outputs.release_tag }}"]; then
+          if [ "" != "${{ steps.get_current_release_tag.outputs.release_tag }}" ]; then
             RELEASE_TAG=`echo ${{ steps.get_current_release_tag.outputs.release_tag }}`
           else
             RELEASE_TAG=`echo ${{ steps.get_current_release_from_commit_hash.outputs.release_tag }}`
