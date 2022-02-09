@@ -38,3 +38,37 @@ jobs:
             # Any open MR should cancel the creation of a new MR
             exit 1;
           fi
+      - id: get_current_release_tag
+        name: Get current release tag from production deploy.json
+        run: |
+          wget https://developer.va.gov/deploy.json
+          RELEASE_TAG=`jq ".release" deploy.json`
+          echo $RELEASE_TAG
+          echo "::set-output name=release_tag::$RELEASE_TAG"
+      - id: get_current_commit_hash
+        name: Get currently deployed hash if last deploy didn't use the release tag
+        if: steps.get_current_release_tag.outputs.release_tag == ""
+        run: |
+          COMMIT_HASH=`jq ".commit" deploy.json`
+          echo $COMMIT_HASH
+          echo "::set-output name=commit_hash::$COMMIT_HASH"
+      - id: get_current_derived_release_tag
+        name: Get the release tag from the GitHub API to unify the remainder of this workflow
+        if: steps.get_current_commit_hash.outputs.commit_hash != ""
+        run: |
+          $RELEASE_TAG=`gh api /repos/department-of-veterans-affairs/developer-portal/tags | jq ".[] | select(.commit.sha == \"$COMMIT_HASH\").name"`
+          echo $RELEASE_TAG
+          echo "::set-output name=release_tag::$RELEASE_TAG"
+      - id: unified_release_tag
+        name: Unify release tag regardless of how it was found
+        run: |
+          if [ "" != "${{ steps.get_current_release_tag.outputs.release_tag }}"]; then
+            RELEASE_TAG=`echo ${{ steps.get_current_release_tag.outputs.release_tag }}`
+          else
+            RELEASE_TAG=`echo ${{ steps.get_current_derived_release_tag.outputs.release_tag }}`
+          fi
+          echo $RELEASE_TAG
+          echo "::set-output name=release_tag::$RELEASE_TAG"
+      - name: Check relase tag
+        run: |
+          echo ${{ steps.unified_releade_tag.outputs.release_tag }}
