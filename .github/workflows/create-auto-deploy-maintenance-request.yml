@@ -42,7 +42,7 @@ jobs:
         name: Get current release tag from production deploy.json
         run: |
           wget https://developer.va.gov/deploy.json
-          echo '{environment: "production",date: "Mon Feb  7 16:00:21 UTC 2022",release: "",commit: "78be23b6f1309ef26dab92617ea7381e337f9187"}' > deploy.json
+          echo '{"environment": "production","date": "Mon Feb  7 16:00:21 UTC 2022","release": "","commit": "78be23b6f1309ef26dab92617ea7381e337f9187"}' > deploy.json
           RELEASE_TAG=`jq -r ".release" deploy.json`
           echo $RELEASE_TAG
           echo "::set-output name=release_tag::$RELEASE_TAG"
