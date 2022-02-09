@@ -66,4 +66,4 @@ jobs:
           echo "::set-output name=release_tag::$RELEASE_TAG"
       - name: Check relase tag
         run: |
-          echo ${{ steps.unified_releade_tag.outputs.release_tag }}
+          echo ${{ steps.unified_release_tag.outputs.release_tag }}
