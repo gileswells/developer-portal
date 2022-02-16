@@ -1,0 +1,23 @@
+name: Test self-cancel on failure
+
+on:
+  workflow_dispatch:
+
+jobs:
+  cancel_yourself:
+    runs-on: ubuntu-latest
+    steps:
+      - id: step_with_error
+        name: This step will exit 1
+        continue-on-error: true
+        run: |
+          echo "This step should end with a failure";
+          exit 1;
+      - name: Self cancel the job on failure
+        if: steps.step_with_error.outcome == 'failure'
+        run: |
+          echo ${{GITHUB_RUN_ID}}
+          gh run cancel ${{GITHUB_RUN_ID}}
+          sleep 60
+      - name: This shouldn't fire
+        run: echo "Why are you here? Go home. The movie's over."
