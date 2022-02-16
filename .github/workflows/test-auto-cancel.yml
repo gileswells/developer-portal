@@ -7,6 +7,7 @@ jobs:
   cancel_yourself:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - id: step_with_error
         name: This step will exit 1
         continue-on-error: true
