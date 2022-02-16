@@ -16,8 +16,8 @@ jobs:
       - name: Self cancel the job on failure
         if: steps.step_with_error.outcome == 'failure'
         run: |
-          echo ${{GITHUB_RUN_ID}}
-          gh run cancel ${{GITHUB_RUN_ID}}
+          echo ${{env.GITHUB_RUN_ID}}
+          gh run cancel ${{env.GITHUB_RUN_ID}}
           sleep 60
       - name: This shouldn't fire
         run: echo "Why are you here? Go home. The movie's over."
