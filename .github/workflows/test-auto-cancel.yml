@@ -17,6 +17,7 @@ jobs:
         if: steps.step_with_error.outcome == 'failure'
         run: |
           echo ${{env.GITHUB_RUN_ID}}
+          echo ${{secrets.GIT_AUTO_DEPLOY_TOKEN}} | gh auth login --with-token
           gh run cancel ${{env.GITHUB_RUN_ID}}
           sleep 60
       - name: This shouldn't fire
