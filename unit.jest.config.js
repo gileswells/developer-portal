@@ -17,7 +17,7 @@ module.exports = {
       branches: 65,
       functions: 75,
       lines: 85,
-      statements: 85
+      statements: 80
     }
   },
   setupFiles: [
