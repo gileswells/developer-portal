@@ -20,21 +20,6 @@ jobs:
         with:
           node-version: 12
 
-      - id: cache_cypress_binary
-        name: Cache Cypress binary
-        uses: actions/cache@v2
-        env:
-          cache-name: developer-portal-cypress-binary
-        with:
-          path: cypress/cache
-          key: ${{ runner.os }}-cypress-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Install Cypress
-        if: steps.cache_cypress_binary.outputs.cache-hit != 'true'
-        uses: cypress-io/github-action@v2
-        with:
-          runTests: false
-
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
@@ -58,8 +43,9 @@ jobs:
 
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.0'
           bundler-cache: true
+          ruby-version: '3.0'
+          working-directory: smoketest
 
       - name: Delete smoketest Okta apps
         env:
