@@ -37,7 +37,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          config: ignoreTestFiles=null
+          config: ignoreTestFiles=null,baseUrl=https://dev-developer.va.gov
           install: false
           spec: cypress/integration/accessibility.spec.js
 
