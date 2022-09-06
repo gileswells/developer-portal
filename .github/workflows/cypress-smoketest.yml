@@ -1,8 +1,8 @@
-name: Cypress Smoketest
+name: Smoketest - Sandbox Form
 
 on:
-  schedule:
-    - cron: '20 * * * *'
+  # schedule:
+  #   - cron: '20 * * * *'
   workflow_dispatch:
 
 env:
@@ -13,6 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12
 
       - id: cache_cypress_binary
         name: Cache Cypress binary
