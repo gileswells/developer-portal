@@ -39,7 +39,7 @@ jobs:
         with:
           config: ignoreTestFiles=null,baseUrl=https://dev-developer.va.gov
           install: false
-          spec: cypress/integration/accessibility.spec.js
+          spec: cypress/integration/smoketest.spec.js
 
       - name: Upload failed screenshots
         uses: actions/upload-artifact@v2
