@@ -11,6 +11,7 @@ env:
 jobs:
   cypress_smoketest:
     runs-on: ubuntu-latest
+    container: cypress/included:9.6.0
     steps:
       - uses: actions/checkout@v2
 
