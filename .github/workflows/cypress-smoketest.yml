@@ -22,12 +22,7 @@ jobs:
 
       - name: Cypress run
         run: |
-          ls -la ~/.cache
-          ls -la ~/.cache/Cypress
-          ls -la ~/.cache/Cypress/9.6.0
-          ls -la ~/.cache/Cypress/9.6.0/Cypress
-          which cypress
-          cypress run --config ignoreTestFiles=null,baseUrl=https://dev-developer.va.gov -s ./cypress/integration/smoketest.spec.js
+          docker run -it --entrypoint=cypress cypress/included:9.4.1 run --config ignoreTestFiles=null,baseUrl=https://dev-developer.va.gov -s ./cypress/integration/smoketest.spec.js
 
       - name: Upload failed screenshots
         uses: actions/upload-artifact@v2
