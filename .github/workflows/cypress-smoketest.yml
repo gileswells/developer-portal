@@ -12,26 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # - name: Setup node
-      #   uses: actions/setup-node@v2
-      #   env:
-      #     CYPRESS_INSTALL_BINARY: 0
-      #   with:
-      #     node-version: 12
-      # - name: Install Dependencies
-      #   env:
-      #     CYPRESS_INSTALL_BINARY: 0
-      #   run: npm ci
-
-      - name: Install only Cypress dependencies
-        env:
-          CYPRESS_INSTALL_BINARY: 0
-        run: |
-          npm install cypress@9.6.0 cypress-axe@0.14.0 cypress-plugin-tab@1.0.5 cypress-real-events@1.7.0 axe-core@4.4.2
-
       - name: Cypress run
         run: |
-          cypress run --config ignoreTestFiles=null,baseUrl=https://dev-developer.va.gov -s ./cypress/integration/smoketest.spec.js
+          cypress run --config supportFile=false,ignoreTestFiles=null,baseUrl=https://dev-developer.va.gov -s ./cypress/integration/smoketest.spec.js
 
       - name: Upload failed screenshots
         uses: actions/upload-artifact@v2
