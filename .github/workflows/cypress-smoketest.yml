@@ -5,9 +5,6 @@ on:
   #   - cron: '20 * * * *'
   workflow_dispatch:
 
-env:
-  CYPRESS_CACHE_FOLDER: cypress/cache
-
 jobs:
   cypress_smoketest:
     runs-on: ubuntu-latest
@@ -22,7 +19,7 @@ jobs:
 
       - name: Cypress run
         run: |
-          docker run -it --entrypoint=cypress cypress/included:9.4.1 run --config ignoreTestFiles=null,baseUrl=https://dev-developer.va.gov -s ./cypress/integration/smoketest.spec.js
+          cypress run --config ignoreTestFiles=null,baseUrl=https://dev-developer.va.gov -s ./cypress/integration/smoketest.spec.js
 
       - name: Upload failed screenshots
         uses: actions/upload-artifact@v2
