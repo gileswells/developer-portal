@@ -21,11 +21,8 @@ jobs:
       #     node-version: 12
 
       - name: Cypress run
-        uses: cypress-io/github-action@v4
-        with:
-          config: ignoreTestFiles=null,baseUrl=https://dev-developer.va.gov
-          install: false
-          spec: cypress/integration/smoketest.spec.js
+        run: |
+          cypress run --config ignoreTestFiles=null,baseUrl=https://dev-developer.va.gov -s ./cypress/integration/smoketest.spec.js
 
       - name: Upload failed screenshots
         uses: actions/upload-artifact@v2
