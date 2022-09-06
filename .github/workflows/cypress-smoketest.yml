@@ -12,35 +12,36 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Cypress run
-        run: |
-          cypress run --config supportFile=false,ignoreTestFiles=null,baseUrl=https://dev-developer.va.gov -s ./cypress/integration/smoketest.spec.js
+      # - name: Cypress run
+      #   run: |
+      #     cypress run --config supportFile=false,ignoreTestFiles=null,baseUrl=https://dev-developer.va.gov -s ./cypress/integration/smoketest.spec.js
 
-      - name: Upload failed screenshots
-        uses: actions/upload-artifact@v2
-        if: failure()
-        with:
-          name: cypress-screenshots
-          path: cypress/screenshots
+      # - name: Upload failed screenshots
+      #   uses: actions/upload-artifact@v2
+      #   if: failure()
+      #   with:
+      #     name: cypress-screenshots
+      #     path: cypress/screenshots
 
-      - name: Upload failed videos
-        uses: actions/upload-artifact@v2
-        if: failure()
-        with:
-          name: cypress-videos
-          path: cypress/videos
+      # - name: Upload failed videos
+      #   uses: actions/upload-artifact@v2
+      #   if: failure()
+      #   with:
+      #     name: cypress-videos
+      #     path: cypress/videos
 
-      - uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-          ruby-version: '3.0'
-          working-directory: smoketest
+      # - uses: ruby/setup-ruby@v1
+      #   with:
+      #     bundler-cache: true
+      #     ruby-version: '3.0'
+      #     working-directory: smoketest
 
       - name: Delete smoketest Okta apps
         env:
           OKTA_BASE_URL: 'https://deptva-eval.okta.com/api/v1'
           OKTA_TOKEN: ${{ secrets.OKTA_TOKEN }}
         run: |
+          bundle install
           acgClientId=`jq -r '.clientId' ./cypress/downloads/sandbox-form-post-response.json`;
           ccgClientId=`jq -r '.ccgClientId' ./cypress/downloads/sandbox-form-post-response.json`;
           echo "Deleting ACG Client: $acgClientId"
