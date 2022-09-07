@@ -34,19 +34,26 @@ jobs:
 
       - name: Send Slack notification for a failed signup
         uses: slackapi/slack-github-action@v1.21.0
-        if: success()
+        if: failure()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         with:
           payload: |
             {
-              "text": "Just a test, trying to see where this webhook posts to.",
+              "text": "Developer Portal Sandbox Signup Form Smoketest: ${{ job.status }}",
               "blocks": [
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Just a test, trying to see where this webhook posts to.\n\nGitHub Action smoketest: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                    "text": "Developer Portal Sandbox Signup Form Smoketest:\n*Status: ${{ job.status }}*\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "@team_okapi please investigate"
                   }
                 }
               ]
