@@ -1,5 +1,6 @@
-ENV['LOAD_PATH'] = './vendor/bundle'
-p ENV['LOAD_PATH']
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+p $LOAD_PATH
+
 require('Oktakit')
 
 id = ARGV[0]
