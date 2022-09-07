@@ -1,4 +1,4 @@
-require('Oktakit');
+require('./vendor/bundle/Oktakit');
 
 id = ARGV[0];
 
