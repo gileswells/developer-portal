@@ -29,15 +29,19 @@ jobs:
       #     name: cypress-videos
       #     path: cypress/videos
 
-      - name: Install ruby and bundle install
+      - name: Setup ruby
+        uses: ruby/ruby-setup@v1
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true
+          working-directory: 'smoketest'
+
+      - name: Install jq and place dummy json
         run: |
-          apt update;
-          apt install -y ruby-full jq;
-          cd smoketest;
-          gem install bundler;
-          bundle install;
-          mkdir -p ../cypress/downloads/
-          echo '{"clientID": "0oai655iuqUdt4cmh2p7","ccgClientId": "0oai654awjcicd2Ez2p7"}' > ../cypress/downloads/sandbox-form-post-response.json
+          sudo apt update;
+          sudo apt install -y jq;
+          mkdir -p ./cypress/downloads/
+          echo '{"clientID": "0oai655iuqUdt4cmh2p7","ccgClientId": "0oai654awjcicd2Ez2p7"}' > ./cypress/downloads/sandbox-form-post-response.json
 
       - name: Delete smoketest Okta apps
         env:
