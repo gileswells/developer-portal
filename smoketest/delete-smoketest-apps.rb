@@ -1,10 +1,13 @@
-require('Oktakit');
+$:.unshift File.dirname(__FILE__)
+p LOAD_PATH
 
-id = ARGV[0];
+require('./vendor/bundle/3.1.0/gems/oktakit-0.3.3/lib/oktakit.rb')
 
-client = Oktakit.new(token: ENV['OKTA_TOKEN'], api_endpoint: ENV['OKTA_BASE_URL']);
-response, http_status = client.deactivate_application(id);
-p(http_status);
-response, http_status = client.delete_application(id);
-p(http_status);
-p(response);
+id = ARGV[0]
+
+client = Oktakit.new(token: ENV['OKTA_TOKEN'], api_endpoint: ENV['OKTA_BASE_URL'])
+response, http_status = client.deactivate_application(id)
+p http_status
+response, http_status = client.delete_application(id)
+p http_status
+p response
