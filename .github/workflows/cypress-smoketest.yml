@@ -16,7 +16,7 @@ jobs:
 
       - name: Cypress run
         run: |
-          docker run -t -v $PWD:/e2e -w /e2e cypress/included:9.6.0 --config ignoreTestFiles=null,baseUrl=https://dev-developer.va.gov -s ./cypress/integration/smoketest.spec.js
+          docker run -t -v $PWD:/e2e -w /e2e cypress/included:9.6.0 --config supportFile=false,ignoreTestFiles=null,baseUrl=https://dev-developer.va.gov -s ./cypress/integration/smoketest.spec.js
 
       - name: Upload failed screenshots
         uses: actions/upload-artifact@v2
@@ -31,6 +31,26 @@ jobs:
         with:
           name: cypress-videos
           path: cypress/videos
+
+      - name: Send Slack notification for a failed signup
+        uses: slackapi/slack-github-action@v1.21.0
+        if: success()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:
+          payload: |
+            {
+              "text": "Just a test, trying to see where this webhook posts to.",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Just a test, trying to see where this webhook posts to.\n\nGitHub Action smoketest: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                  }
+                }
+              ]
+            }
 
       - name: Setup ruby
         uses: ruby/setup-ruby@v1
