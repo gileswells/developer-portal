@@ -47,7 +47,7 @@ jobs:
         run: |
           cd smoketest;
           gem install bundler;
-          bundle install;
+          bundle install --local;
           acgClientId=`jq -r '.clientId' ../cypress/downloads/sandbox-form-post-response.json`;
           ccgClientId=`jq -r '.ccgClientId' ../cypress/downloads/sandbox-form-post-response.json`;
           echo "Deleting ACG Client: $acgClientId"
