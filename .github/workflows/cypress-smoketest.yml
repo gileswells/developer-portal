@@ -49,6 +49,7 @@ jobs:
           OKTA_TOKEN: ${{ secrets.OKTA_TOKEN }}
         run: |
           cd smoketest;
+          ls -la ./vendor/bundle;
           # gem install bundler;
           # bundle install --local;
           acgClientId=`jq -r '.clientID' ../cypress/downloads/sandbox-form-post-response.json`;
