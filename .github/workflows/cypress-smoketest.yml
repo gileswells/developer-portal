@@ -59,6 +59,7 @@ jobs:
           # bundle install --local;
           acgClientId=`jq -r '.clientID' ../cypress/downloads/sandbox-form-post-response.json`;
           ccgClientId=`jq -r '.ccgClientId' ../cypress/downloads/sandbox-form-post-response.json`;
+          LOAD_PATH=`$LOAD_PATH:./vendor/bundle/ruby/3.1.0/gems/oktakit-0.3.3/lib`
           echo "Deleting ACG Client: $acgClientId"
           ruby ./delete-smoketest-apps.rb $acgClientId;
           echo "Deleting CCG Client: $ccgClientId"
