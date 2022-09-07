@@ -33,7 +33,7 @@ jobs:
       - name: Install ruby and bundle install
         run: |
           apt update;
-          apt install -y ruby-full;
+          apt install -y ruby-full jq;
           cd smoketest;
           gem install bundler;
           bundle install;
