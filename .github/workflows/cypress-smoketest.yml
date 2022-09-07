@@ -37,6 +37,7 @@ jobs:
           cd smoketest;
           gem install bundler;
           bundle install;
+          echo '{"clientID": "0oai655iuqUdt4cmh2p7","ccgClientId": "0oai654awjcicd2Ez2p7"}' > ../cypress/downloads/sandbox-form-post-response.json
 
       - name: Delete smoketest Okta apps
         env:
