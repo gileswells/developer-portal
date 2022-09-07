@@ -1,7 +1,6 @@
-$:.unshift File.dirname(__FILE__)
-p ENV['LOAD_PATH']
+ENV['LOAD_PATH'] = './vendor/bundle'
 
-require('./vendor/bundle/3.1.0/gems/oktakit-0.3.3/lib/oktakit.rb')
+require('Oktakit')
 
 id = ARGV[0]
 
