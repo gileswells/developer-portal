@@ -1,7 +1,7 @@
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'vendor', 'bundle', 'ruby', '3.1.0', 'gems', 'oktakit-0.3.3', 'lib'))
 p $LOAD_PATH
 
-require('./vendor/bundle/ruby/3.1.0/gems/oktakit-0.3.3/lib/oktakit.rb')
+require_relative './vendor/bundle/ruby/3.1.0/gems/oktakit-0.3.3/lib/oktakit.rb'
 
 id = ARGV[0]
 
