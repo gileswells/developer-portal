@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'bundler/setup'
-require 'Oktakit'
+require 'oktakit'
 
 id = ARGV[0]
 
