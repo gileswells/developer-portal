@@ -51,6 +51,6 @@ jobs:
           acgClientId=`jq -r '.clientId' ../cypress/downloads/sandbox-form-post-response.json`;
           ccgClientId=`jq -r '.ccgClientId' ../cypress/downloads/sandbox-form-post-response.json`;
           echo "Deleting ACG Client: $acgClientId"
-          ruby ./delete-smoketest-apps.rb $acgClientId;
+          bundle exec ruby ./delete-smoketest-apps.rb $acgClientId;
           echo "Deleting CCG Client: $ccgClientId"
-          ruby ./delete-smoketest-apps.rb $ccgClientId;
+          bundle exec ruby ./delete-smoketest-apps.rb $ccgClientId;
