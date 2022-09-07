@@ -49,11 +49,11 @@ jobs:
           OKTA_TOKEN: ${{ secrets.OKTA_TOKEN }}
         run: |
           cd smoketest;
-          gem install bundler;
-          bundle install --local;
+          # gem install bundler;
+          # bundle install --local;
           acgClientId=`jq -r '.clientId' ../cypress/downloads/sandbox-form-post-response.json`;
           ccgClientId=`jq -r '.ccgClientId' ../cypress/downloads/sandbox-form-post-response.json`;
           echo "Deleting ACG Client: $acgClientId"
-          bundle exec ruby ./delete-smoketest-apps.rb $acgClientId;
+          ruby ./delete-smoketest-apps.rb $acgClientId;
           echo "Deleting CCG Client: $ccgClientId"
-          bundle exec ruby ./delete-smoketest-apps.rb $ccgClientId;
+          ruby ./delete-smoketest-apps.rb $ccgClientId;
