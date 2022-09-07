@@ -30,7 +30,7 @@ jobs:
       #     path: cypress/videos
 
       - name: Setup ruby
-        uses: ruby/ruby-setup@v1
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.0'
           bundler-cache: true
