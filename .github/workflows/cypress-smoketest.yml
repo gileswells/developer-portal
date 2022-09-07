@@ -32,7 +32,7 @@ jobs:
       - name: Setup ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.0'
+          ruby-version: '3.1'
           bundler-cache: true
           working-directory: 'smoketest'
 
@@ -49,8 +49,7 @@ jobs:
           OKTA_TOKEN: ${{ secrets.OKTA_TOKEN }}
         run: |
           cd smoketest;
-          ls -la ./vendor/bundle/ruby;
-          ls -la ./vendor/bundle/ruby/gems;
+          ls -la ./vendor/bundle/ruby/*;
           # gem install bundler;
           # bundle install --local;
           acgClientId=`jq -r '.clientID' ../cypress/downloads/sandbox-form-post-response.json`;
