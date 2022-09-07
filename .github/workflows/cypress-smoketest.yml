@@ -48,8 +48,8 @@ jobs:
           cd smoketest;
           gem install bundler;
           bundle install;
-          acgClientId=`jq -r '.clientId' ./cypress/downloads/sandbox-form-post-response.json`;
-          ccgClientId=`jq -r '.ccgClientId' ./cypress/downloads/sandbox-form-post-response.json`;
+          acgClientId=`jq -r '.clientId' ../cypress/downloads/sandbox-form-post-response.json`;
+          ccgClientId=`jq -r '.ccgClientId' ../cypress/downloads/sandbox-form-post-response.json`;
           echo "Deleting ACG Client: $acgClientId"
           ruby ./smoketest/delete-smoketest-apps.rb $acgClientId;
           echo "Deleting CCG Client: $ccgClientId"
