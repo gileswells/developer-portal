@@ -14,23 +14,23 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # - name: Cypress run
-      #   run: |
-      #     docker run -it -v $PWD:/e2e -w /e2e cypress/included:9.6.0 --config ignoreTestFiles=null,baseUrl=https://dev-developer.va.gov -s ./cypress/integration/smoketest.spec.js
+      - name: Cypress run
+        run: |
+          docker run -it -v $PWD:/e2e -w /e2e cypress/included:9.6.0 --config ignoreTestFiles=null,baseUrl=https://dev-developer.va.gov -s ./cypress/integration/smoketest.spec.js
 
-      # - name: Upload failed screenshots
-      #   uses: actions/upload-artifact@v2
-      #   if: failure()
-      #   with:
-      #     name: cypress-screenshots
-      #     path: cypress/screenshots
+      - name: Upload failed screenshots
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
 
-      # - name: Upload failed videos
-      #   uses: actions/upload-artifact@v2
-      #   if: failure()
-      #   with:
-      #     name: cypress-videos
-      #     path: cypress/videos
+      - name: Upload failed videos
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-videos
+          path: cypress/videos
 
       - name: Setup ruby
         uses: ruby/setup-ruby@v1
@@ -39,12 +39,10 @@ jobs:
           bundler-cache: true
           working-directory: 'smoketest'
 
-      - name: Install jq and place dummy json
+      - name: Install jq
         run: |
           sudo apt update;
           sudo apt install -y jq;
-          mkdir -p ./cypress/downloads/
-          echo '{"clientID": "0oai655iuqUdt4cmh2p7","ccgClientId": "0oai654awjcicd2Ez2p7"}' > ./cypress/downloads/sandbox-form-post-response.json
 
       - name: Delete smoketest Okta apps
         env:
@@ -52,11 +50,6 @@ jobs:
           OKTA_TOKEN: ${{ secrets.OKTA_TOKEN }}
         run: |
           cd smoketest;
-          find ./vendor/bundle/ruby/ -type f | grep oktakit;
-          ls -la ./vendor/bundle/ruby/3.1.0/
-          ls -la ./vendor/bundle/ruby/3.1.0/gems/
-          # gem install bundler;
-          # bundle install --local;
           acgClientId=`jq -r '.clientID' ../cypress/downloads/sandbox-form-post-response.json`;
           ccgClientId=`jq -r '.ccgClientId' ../cypress/downloads/sandbox-form-post-response.json`;
           echo "Deleting ACG Client: $acgClientId"
