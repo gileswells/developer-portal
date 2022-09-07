@@ -1,4 +1,4 @@
-require('./vendor/bundle/3.1.0/gems/oktakit-0.3.3/lib/oktakit.rb');
+require('Oktakit');
 
 id = ARGV[0];
 
