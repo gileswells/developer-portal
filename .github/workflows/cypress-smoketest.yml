@@ -16,7 +16,7 @@ jobs:
 
       - name: Cypress run
         run: |
-          docker run -t -v $PWD:/e2e -w /e2e cypress/included:9.6.0 --config supportFile=false,ignoreTestFiles=null,baseUrl=https://dev-developer.va.gov -s ./cypress/integration/smoketest.spec.js
+          docker run -t -v $PWD:/e2e -w /e2e cypress/included:9.6.0 --config ignoreTestFiles=null,baseUrl=https://dev-developer.va.gov -s ./cypress/integration/smoketest.spec.js
 
       - name: Upload failed screenshots
         uses: actions/upload-artifact@v2
@@ -36,8 +36,10 @@ jobs:
         uses: slackapi/slack-github-action@v1.21.0
         if: failure()
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         with:
+          channel-id: C012L7SRG66
+          # This ID is for #vaapi-alerts in Lighthouse Slack
           payload: |
             {
               "text": "Developer Portal Sandbox Signup Form Smoketest: ${{ job.status }}",
