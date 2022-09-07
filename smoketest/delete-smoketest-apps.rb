@@ -1,5 +1,5 @@
 ENV['LOAD_PATH'] = './vendor/bundle'
-
+p ENV['LOAD_PATH']
 require('Oktakit')
 
 id = ARGV[0]
