@@ -142,7 +142,7 @@ phases:
         echo 'explore/health/docs/community_care|/explore/api/community-care-eligibility/docs' >> ./redirects.txt
         echo 'explore/health/docs/fhir|/explore/api/patient-health/docs' >> ./redirects.txt
         echo 'explore/health/docs/provider_directory|/explore/api/provider-directory/docs' >> ./redirects.txt
-        echo 'explore/api/patient-health/docs?version=v0-argonaut'|/explore/api/patient-health/docs?version=current' >> ./redirects.txt
+        echo 'explore/api/patient-health/docs?version=v0-argonaut|/explore/api/patient-health/docs?version=current' >> ./redirects.txt
         echo 'explore/health/docs/urgent_care|/explore/api/urgent-care-eligibility/docs' >> ./redirects.txt
         echo 'explore/loanGuaranty/docs/lgy_guaranty_remittance|/explore/api/guaranty-remittance/docs' >> ./redirects.txt
         echo 'explore/loanGuaranty/docs/loan_guaranty|/explore/api/loan-guaranty/docs' >> ./redirects.txt
