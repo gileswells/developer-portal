@@ -18,7 +18,7 @@ export const apiAlerts = [
     content: (
       <>
         Version 0 of the Veteran Confirmation API is deprecated and scheduled for deactivation on
-        April 4, 2024. Version 1 of the Veteran Confirmation API is now active.
+        October 4, 2024. Version 1 of the Veteran Confirmation API is now active.
       </>
     ),
     path: '/explore/api/veteran-confirmation',
