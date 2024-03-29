@@ -9,11 +9,11 @@ const TestUsers = (): JSX.Element => {
     <>
       <SectionHeaderWrapper heading="Test Users" id="test-users" />
       <p>
-        Some APIs require test users and test data. Most of the test data provided from the
-        Lighthouse platform comes from internal VA systems, are not real data, and are reset based
-        upon new recordings of underlying services. We provide test accounts for you to use while
-        developing your application. These test accounts are API-specific, and contain data that is
-        geared toward each API.
+        Some APIs require test users and test data. Most of the test data provided by VA Developer
+        comes from internal VA systems, are not real data, and are reset based upon new recordings
+        of underlying services. We provide test accounts for you to use while developing your
+        application. These test accounts are API-specific, and contain data that is geared toward
+        each API.
       </p>
       <p>
         To access test data, go to the{' '}

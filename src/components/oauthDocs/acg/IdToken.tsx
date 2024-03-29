@@ -46,9 +46,9 @@ const IdToken = (): JSX.Element => (
         <code>nonce</code> - should match the <code>nonce</code> you initiated authorization with.
       </li>
       <li>
-        <code>exp</code> - the expiration time of the JWT. The token cannot be accepted by the
-        Lighthouse platform after this time, and your application should not use an expired token to
-        identify a user.
+        <code>exp</code> - the expiration time of the JWT. The token cannot be accepted by VA
+        Developer after this time, and your application should not use an expired token to identify
+        a user.
       </li>
     </ul>
   </>

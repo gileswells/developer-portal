@@ -7,10 +7,9 @@ const Https = (): JSX.Element => (
     <p>
       Outside of local development environments, all redirect endpoints must use the{' '}
       <code>https</code> protocol for communication. The <code>https</code> protocol provides a
-      secure encrypted connection between the user&apos;s client, your application, and the
-      Lighthouse platform and authorization servers. This mitigates the risk of some types of
-      man-in-the-middle attacks and prevents third-parties from intercepting user&apos;s
-      authorization credentials.
+      secure encrypted connection between the user&apos;s client, your application, VA Developer,
+      and authorization servers. This mitigates the risk of some types of man-in-the-middle attacks
+      and prevents third-parties from intercepting user&apos;s authorization credentials.
     </p>
   </>
 );

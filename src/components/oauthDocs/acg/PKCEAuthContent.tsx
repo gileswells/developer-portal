@@ -58,7 +58,7 @@ https://sandbox-api.va.gov${baseAuthPath}/authorization?
                 <strong>Required</strong>
               </td>
               <td>
-                The <code>client_id</code> issued by the VA Lighthouse APIs team team
+                The <code>client_id</code> issued by the VA APIs team.
               </td>
             </tr>
             <tr>

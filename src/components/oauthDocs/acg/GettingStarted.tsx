@@ -6,7 +6,7 @@ const GettingStarted = (): JSX.Element => (
   <>
     <SectionHeaderWrapper heading="Getting Started" id="getting-started" />
     <p>
-      The VA Lighthouse APIs platform uses the{' '}
+      VA Developer uses the{' '}
       <a href="https://openid.net/specs/openid-connect-core-1_0.html">OpenID Connect</a> standard to
       allow Veterans to authorize third-party applications or Veteran Service Organizations (VSOs)
       to access data on their behalf. The kind of access granted, process for authorization, and
