@@ -39,7 +39,7 @@ const ClientCredentialsGrantDocs = (): JSX.Element => {
         </p>
         <ApisLoader hideSpinner />
         <GoodToKnow />
-        <GettingStarted api={api} />
+        <GettingStarted />
         <AuthCodeFlowContent api={api} />
         {!EXCLUDE_ICN_FRAGMENTS.includes(api.urlFragment) && <TestUsers />}
       </div>
