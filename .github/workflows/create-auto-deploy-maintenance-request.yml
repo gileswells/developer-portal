@@ -114,7 +114,7 @@ jobs:
           echo "Get the releases"
           gh api /repos/department-of-veterans-affairs/developer-portal/releases > releases.json
           CURRENT_RELEASE_ID=`jq ".[] | select(.tag_name == \"${{ env.current-release-tag }}\") | .id" releases.json`
-          PROPOSED_RELEASE_PRS=`jq -r ".[] | select(.id > $CURRENT_RELEASE_ID ) | \"- \" + .name + \"\"" releases.json | sed -E 's/(.*)\#([0-9]{1,})\)/\2/'`
+          PROPOSED_RELEASE_PRS=`jq -r ".[] | select(.id > $CURRENT_RELEASE_ID ) | \"- \" + .name + \"\"" releases.json | sed -E 's/(.*)\#([0-9]{1,})\)(.*)/\2/'`
           echo '```' > maintainer-notes.txt
           echo "Release tag: ${{ env.proposed-release-tag }}" >> maintainer-notes.txt
           echo "Rollback tag: ${{ env.current-release-tag }}" >> maintainer-notes.txt
