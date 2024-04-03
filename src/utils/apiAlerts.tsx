@@ -2,10 +2,6 @@ import React from 'react';
 
 export const apiAlerts = [
   {
-    content: <>A new version of Appeals Status API (v1) will launch later this year.</>,
-    path: '/explore/api/appeals-status',
-  },
-  {
     content: (
       <>
         Version 0 of the VA Facilities API is deprecated and scheduled for deactivation on June 1,
