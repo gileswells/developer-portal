@@ -67,7 +67,7 @@ jobs:
         continue-on-error: true
         run: |
           MR_NUMBER=`echo ${{steps.get_mr_number.outputs.mr_number}}`
-          RELEASE_TAG=`echo ${{steps.get_mr_number.outputs.release_tag}}`
+          RELEASE_TAG=`echo ${{steps.get_mr_number.outputs.release_tag}} | tr -d '\n'`
           echo 'Starting deploy to production'
           aws codebuild start-build --project-name developer-portal-deploy --environment-variables-override "[{\"name\":\"ENVIRONMENTS\",\"value\":\"production\"},{\"name\":\"MR\",\"value\":\"$MR_NUMBER\"},{\"name\":\"RELEASE\",\"value\":\"$RELEASE_TAG\"}]" > build.json
           BUILD_ID=`jq -r '.build.id' build.json`
@@ -118,3 +118,31 @@ jobs:
       - name: Disable Workflow till next MR is created
         if: steps.deploy_to_production.outcome == 'success'
         run: gh workflow disable 'Auto Deploy master to Production'
+      - name: Handle failure
+        if: failure()
+        uses: slackapi/slack-github-action@v1.23.0
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        with:
+          # This ID is for #team-okapi-alerts in Lighthouse Slack
+          channel-id: C05HL4MTAFR
+          payload: |
+            {
+              "text": "Developer Portal Deploy Production Failure",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "A deploy to production job has failed in the Developer Portal repository."
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "@teamokapi please investigate."
+                  }
+                }
+              ]
+            }

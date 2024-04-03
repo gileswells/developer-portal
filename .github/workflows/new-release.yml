@@ -133,3 +133,31 @@ jobs:
       - name: Build dev and staging
         run: |
           aws codebuild start-build --project-name developer-portal-deploy --environment-variables-override name=RELEASE,value=${NEW_TAG}
+      - name: Handle failure
+        if: failure()
+        uses: slackapi/slack-github-action@v1.23.0
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        with:
+          # This ID is for #team-okapi-alerts in Lighthouse Slack
+          channel-id: C05HL4MTAFR
+          payload: |
+            {
+              "text": "Developer Portal Create Release Failure",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "A create release job has failed in the Developer Portal repository."
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "@teamokapi please investigate."
+                  }
+                }
+              ]
+            }
