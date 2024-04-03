@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
 import { useParams } from 'react-router-dom';
-import { PageHeader } from '../../../components';
+import { ApiAlerts, PageHeader } from '../../../components';
 import { Https } from '../../../components/oauthDocs/acg/Https';
 import { TestUsers } from '../../../components/oauthDocs/acg/TestUsers';
 import { IdToken } from '../../../components/oauthDocs/acg/IdToken';
@@ -25,6 +25,7 @@ const AuthorizationCodeGrantDocs = (): JSX.Element => {
       <Helmet>
         <title>{api.name} Authorization Code Grant</title>
       </Helmet>
+      <ApiAlerts />
       <PageHeader header="Authorization Code Grant" subText={api.name} />
       <div className="va-api-authorization-docs">
         <PageLinks />

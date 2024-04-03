@@ -1,16 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-/* eslint-disable complexity */
-import { VaAlert } from '@department-of-veterans-affairs/component-library/dist/react-bindings';
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
-import { Navigate, useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import classNames from 'classnames';
 import ReactMarkdown from 'react-markdown';
 import { isApiDeactivated, isApiDeprecated } from '../../apiDefs/deprecated';
 
-import { lookupApiCategory } from '../../apiDefs/query';
-import { APIDescription, VeteranRedirectMessage } from '../../apiDefs/schema';
-import { PageHeader } from '../../components';
+import { APIDescription } from '../../apiDefs/schema';
+import { ApiAlerts, PageHeader } from '../../components';
 import { useFlag } from '../../flags';
 
 import { FLAG_API_ENABLED_PROPERTY } from '../../types/constants';
@@ -52,23 +49,7 @@ const DeactivationMessage = ({ api }: { api: APIDescription }): JSX.Element | nu
   );
 };
 
-const VeteranRedirectAlertMessage = ({
-  api,
-  veteranRedirect,
-}: {
-  api: APIDescription;
-  veteranRedirect: VeteranRedirectMessage;
-}): JSX.Element => (
-  <VaAlert status="info" key={api.urlSlug} visible uswds>
-    <p className="vads-u-margin-y--0">
-      {veteranRedirect.message}&nbsp;
-      <a href={veteranRedirect.linkUrl}>{veteranRedirect.linkText}</a>.
-    </p>
-  </VaAlert>
-);
-
 const ApiPage = (): JSX.Element => {
-  const location = useLocation();
   const params = useParams();
   const enabledApisFlags = useFlag([FLAG_API_ENABLED_PROPERTY]);
 
@@ -76,31 +57,7 @@ const ApiPage = (): JSX.Element => {
   if (!api) {
     throw new Error('API not found');
   }
-  const category = lookupApiCategory(api.categoryUrlFragment ?? '');
-  const veteranRedirect = api.veteranRedirect ?? category?.content.veteranRedirect;
 
-  const tabsRegex = /tab=(r4|argonaut|dstu2)/;
-  if (location.pathname === '/explore/health/docs/fhir' && tabsRegex.test(location.search)) {
-    const tabName = tabsRegex.exec(location.search)?.[1];
-    let apiVersion = '';
-    switch (tabName) {
-      case 'r4':
-        apiVersion = 'current';
-        break;
-      case 'argonaut':
-        apiVersion = 'argonaut-0.0.0';
-        break;
-      case 'dstu2':
-        apiVersion = 'dstu2-0.0.0';
-        break;
-      default:
-        break;
-    }
-
-    return <Navigate replace to={`/explore/health/docs/fhir?version=${apiVersion}`} />;
-  }
-
-  // if (api === null || !category?.apis.includes(api) || !enabledApisFlags[api.urlSlug]) {
   if (!enabledApisFlags[api.urlFragment]) {
     return (
       <ApisLoader>
@@ -114,11 +71,11 @@ const ApiPage = (): JSX.Element => {
       <Helmet>
         <title>{api.name} Documentation</title>
       </Helmet>
-      <PageHeader header="Docs" subText={api.name} />
-      {veteranRedirect && (
-        <VeteranRedirectAlertMessage api={api} veteranRedirect={veteranRedirect} />
-      )}
-      <DeactivationMessage api={api} />
+      <div className="api-docs-wrapper">
+        <ApiAlerts />
+        <PageHeader header="Docs" subText={api.name} />
+        <DeactivationMessage api={api} />
+      </div>
       {!isApiDeactivated(api) && (
         <div className="sans-serif-headers">
           <ApiDocumentation apiDefinition={api} />

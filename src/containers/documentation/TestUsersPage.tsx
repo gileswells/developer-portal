@@ -12,7 +12,7 @@ import {
   LPB_FORGERY_TOKEN,
   testUserAccessState,
 } from '../../types/constants';
-import { PageHeader } from '../../components';
+import { ApiAlerts, PageHeader } from '../../components';
 
 import { TestUser, isPasswordUniform } from '../../utils/testUsersHelper';
 import { useAppDispatch } from '../../hooks';
@@ -76,17 +76,18 @@ const TestUsersPage = (): JSX.Element => {
       <Helmet>
         <title>{api.name} Test users</title>
       </Helmet>
+      <ApiAlerts />
+      {testUserAccess === testUserAccessState.ACCESS_BLOCKED && (
+        <VaAlert status="error" visible uswds>
+          <p className="vads-u-margin-y--0">
+            There was an error requesting access to the test user data. Please recheck the link in
+            your sandbox access signup email or request access by signing up{' '}
+            <Link to={`/explore/api/${api.urlSlug}/sandbox-access`}>here</Link>.
+          </p>
+        </VaAlert>
+      )}
       <PageHeader header="Test users" subText={api.name} />
       <div className="va-api-authorization-docs">
-        {testUserAccess === testUserAccessState.ACCESS_BLOCKED && (
-          <VaAlert status="error" visible uswds>
-            <p className="vads-u-margin-y--0">
-              There was an error requesting access to the test user data. Please recheck the link in
-              your sandbox access signup email or request access by signing up{' '}
-              <Link to={`/explore/api/${api.urlSlug}/sandbox-access`}>here</Link>.
-            </p>
-          </VaAlert>
-        )}
         {testUserAccess === testUserAccessState.ACCESS_PERMITTED && (
           <>
             <p>

@@ -11,7 +11,7 @@ export const ApiAlerts = (): JSX.Element => {
       {apiAlerts
         .filter(target => location.pathname.includes(target.path))
         .map(target => (
-          <VaAlert key={target.path} status="info" visible uswds>
+          <VaAlert key={target.path} status={target.status} visible uswds>
             <p className="vads-u-margin-y--0">{target.content}</p>
           </VaAlert>
         ))}

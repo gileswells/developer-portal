@@ -2,23 +2,24 @@
 @import '../../styles/swagger';
 
 .documentation {
-  .va-api-api-overview {
-    max-width: 900px;
-
-    h2 {
-      font-size: 2rem;
-    }
-  }
-  
-  .va-api-authorization-docs,
-  .quickstart-wrapper,
-  .documentation-overview-wrapper {
-    max-width: 900px;
-  }
-
   .swagger-ui {
+    .information-container {
+      max-width: 776px;
+    }
     .wrapper {
       margin: unset;
     }
+  }
+}
+.api-docs-wrapper,
+.version-selector-container + p {
+  max-width: 776px;
+}
+
+va-alert {
+  margin-bottom: 8px;
+
+  + div:has(h1#page-header) {
+    margin-top: 24px;
   }
 }

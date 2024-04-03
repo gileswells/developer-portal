@@ -21,6 +21,8 @@
 }
 
 .version-selector-container {
+  max-width: 776px;
+
   &.theme-dark {
     background-color: $color-gray;
     border-radius: 6px 6px 0 0;

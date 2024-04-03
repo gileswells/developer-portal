@@ -28,6 +28,7 @@ export * from './subNav/SubNav';
 export * from './formField';
 export * from './appVersion/AppVersion';
 export * from './apiCheckboxList/APICheckboxList';
+export * from './veteranRedirect/VeteranRedirect';
 export * from './veteranResources/VeteranResources';
 export * from './tooltip/Tooltip';
 export * from './exploreApiCard/ExploreApiCard';

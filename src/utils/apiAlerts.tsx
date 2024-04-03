@@ -9,6 +9,7 @@ export const apiAlerts = [
       </>
     ),
     path: '/explore/api/va-facilities',
+    status: 'warning',
   },
   {
     content: (
@@ -18,6 +19,7 @@ export const apiAlerts = [
       </>
     ),
     path: '/explore/api/veteran-confirmation',
+    status: 'warning',
   },
   {
     content: (
@@ -27,5 +29,6 @@ export const apiAlerts = [
       </>
     ),
     path: '/explore/api/veteran-service-history-and-eligibility',
+    status: 'warning',
   },
 ];

@@ -103,7 +103,7 @@ export default class VersionSelect extends React.PureComponent<
 
     return (
       <>
-        <div className="version-selector-container vads-l-grid-container theme-light">
+        <div className="version-selector-container theme-light">
           <div className="vads-l-row">
             <label
               htmlFor="version-selector-field"

@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Link, useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 
-import { PageHeader } from '../../components';
+import { ApiAlerts, PageHeader, VeteranRedirect } from '../../components';
 import { ExploreApiTags } from '../../components/exploreApiCard/ExploreApiTags';
 import { APIDescription } from '../../apiDefs/schema';
 
@@ -32,6 +32,8 @@ const ApiOverviewPage = (): JSX.Element => {
       <Helmet>
         <title>{api.name}</title>
       </Helmet>
+      <VeteranRedirect api={api} />
+      <ApiAlerts />
       <PageHeader header={api.name} className="vads-u-margin-bottom--1p5" />
       <ExploreApiTags api={api} />
       <ReactMarkdown

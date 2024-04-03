@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useMatch, useParams } from 'react-router-dom';
 import { getApisLoadedState, lookupApiBySlug } from '../../apiDefs/query';
 import { APIDescription } from '../../apiDefs/schema';
-import { ApiAlerts, ApiBreadcrumbs, ContentWithNav, SideNavEntry } from '../../components';
+import { ApiBreadcrumbs, ContentWithNav, SideNavEntry } from '../../components';
 import { apiLoadingState } from '../../types/constants';
 import ApisLoader from '../../components/apisLoader/ApisLoader';
 import './Documentation.scss';
@@ -66,6 +66,7 @@ const ExploreSideNav = (props: ExploreSideNavProps): JSX.Element => {
 const DocumentationRoot = (): JSX.Element => {
   const params = useParams();
   const api = lookupApiBySlug(params.urlSlug as string);
+  const docsPageMatch = useMatch('/explore/api/:urlSlug/docs');
 
   if (
     getApisLoadedState() === apiLoadingState.IN_PROGRESS ||
@@ -80,13 +81,10 @@ const DocumentationRoot = (): JSX.Element => {
   return (
     <>
       <ApiBreadcrumbs api={api} />
-      <div className="vads-l-grid-container vads-u-margin-x--auto">
-        <ApiAlerts />
-      </div>
       <ContentWithNav
-        fullWidth
+        fullWidth={!!docsPageMatch}
         nav={<ExploreSideNav api={api} />}
-        navAriaLabel="API Docs Side"
+        navAriaLabel="Explore API Documentation Side Navigation"
         className="documentation"
       />
     </>

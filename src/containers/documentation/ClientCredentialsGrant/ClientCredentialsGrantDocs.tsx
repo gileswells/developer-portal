@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Helmet } from 'react-helmet';
 import { useParams } from 'react-router-dom';
 import GoodToKnow from '../../../components/oauthDocs/ccg/GoodToKnow';
-import { PageHeader } from '../../../components';
+import { ApiAlerts, PageHeader } from '../../../components';
 import { GettingStarted } from '../../../components/oauthDocs/ccg/GettingStarted';
 import { AuthCodeFlowContent } from '../../../components/oauthDocs/ccg/AuthCodeFlowContent';
 import { TestUsers } from '../../../components/oauthDocs/ccg/TestUsers';
@@ -24,6 +24,7 @@ const ClientCredentialsGrantDocs = (): JSX.Element => {
       <Helmet>
         <title>{api.name} Client Credentials Grant</title>
       </Helmet>
+      <ApiAlerts />
       <PageHeader header="Client Credentials Grant" subText={api.name} />
       <div className="va-api-authorization-docs vads-u-margin-top--3">
         <p>The authentication model for the {api.name} uses OAuth2.0/OpenID Connect. </p>

@@ -6,7 +6,7 @@ import 'jest';
 import { ApiAlerts } from './ApiAlerts';
 
 describe('ApiAlerts', () => {
-  it('should render api alerts', async () => {
+  it('should render api alerts (warning)', async () => {
     const { container } = render(
       <MemoryRouter initialEntries={['/explore/api/va-facilities']}>
         <Routes>
@@ -16,6 +16,7 @@ describe('ApiAlerts', () => {
     );
     const alert = container.querySelector('va-alert');
     expect(alert).toBeInTheDocument();
+    expect(alert).toHaveProperty('status', 'warning');
     expect(await screen.findByShadowText(/VA Facilities API/)).toBeInTheDocument();
   });
 

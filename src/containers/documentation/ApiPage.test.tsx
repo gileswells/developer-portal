@@ -57,7 +57,6 @@ describe('ApiPage', () => {
   };
 
   const lookupApiBySlugMock = jest.spyOn(apiDefs, 'lookupApiBySlug');
-  const lookupApiCategoryMock = jest.spyOn(apiDefs, 'lookupApiCategory');
 
   afterEach(() => {
     jest.resetAllMocks();
@@ -66,13 +65,11 @@ describe('ApiPage', () => {
   describe('given valid url params', () => {
     beforeEach(async () => {
       lookupApiBySlugMock.mockReturnValue(lotrRingsApi);
-      lookupApiCategoryMock.mockReturnValue(fakeCategories.lotr);
       await renderApiPage(defaultFlags, '/explore/api/rings/docs');
     });
 
     it('calls lookupApi methods with correct parameters', () => {
       expect(lookupApiBySlugMock).toHaveBeenCalledWith('rings');
-      expect(lookupApiCategoryMock).toHaveBeenCalledWith('lotr');
     });
 
     it('renders api page heading', () => {
@@ -87,7 +84,6 @@ describe('ApiPage', () => {
   describe('given deactivated api and valid url params', () => {
     beforeEach(async () => {
       lookupApiBySlugMock.mockReturnValue(lotrSilmarilsApi);
-      lookupApiCategoryMock.mockReturnValue(fakeCategories.lotr);
       await renderApiPage(
         {
           ...defaultFlags,
@@ -99,7 +95,6 @@ describe('ApiPage', () => {
 
     it('calls lookupApi methods with correct parameters', () => {
       expect(lookupApiBySlugMock).toHaveBeenCalledWith('silmarils');
-      expect(lookupApiCategoryMock).toHaveBeenCalledWith('lotr');
     });
 
     it('renders deactivated message given deactivated api', () => {
@@ -110,7 +105,6 @@ describe('ApiPage', () => {
   describe('given unenabled api', () => {
     beforeEach(async () => {
       lookupApiBySlugMock.mockReturnValue(lotrRingsApi);
-      lookupApiCategoryMock.mockReturnValue(fakeCategories.lotr);
       await renderApiPage(
         {
           ...defaultFlags,
@@ -124,14 +118,12 @@ describe('ApiPage', () => {
 
     it('calls lookupApi methods with correct parameters', () => {
       expect(lookupApiBySlugMock).toHaveBeenCalledWith('rings');
-      expect(lookupApiCategoryMock).toHaveBeenCalledWith('lotr');
     });
   });
 
   describe('given url with api that does not exist', () => {
     it("ApiPage throws an error that'll get caught by the ErrorBoundary", () => {
       lookupApiBySlugMock.mockReturnValue(null);
-      lookupApiCategoryMock.mockReturnValue(fakeCategories.lotr);
       spyOn(console, 'error');
       expect(() => {
         render(
@@ -161,14 +153,12 @@ describe('ApiPage', () => {
         ],
       };
 
-      lookupApiCategoryMock.mockReturnValue(modifiedLotrApi);
       lookupApiBySlugMock.mockReturnValue(modifiedLotrApi.apis[0]);
       await renderApiPage(defaultFlags, '/explore/api/rings/docs');
     });
 
     it('calls lookupApi methods with correct parameters', () => {
       expect(lookupApiBySlugMock).toHaveBeenCalledWith('rings');
-      expect(lookupApiCategoryMock).toHaveBeenCalledWith('lotr');
     });
 
     it('does not render deactivation message', () => {
@@ -192,53 +182,17 @@ describe('ApiPage', () => {
         ],
       };
 
-      lookupApiCategoryMock.mockReturnValue(modifiedLotrApi);
       lookupApiBySlugMock.mockReturnValue(modifiedLotrApi.apis[0]);
       await renderApiPage(defaultFlags, '/explore/api/rings/docs');
     });
 
     it('calls lookupApi methods with correct parameters', () => {
       expect(lookupApiBySlugMock).toHaveBeenCalledWith('rings');
-      expect(lookupApiCategoryMock).toHaveBeenCalledWith('lotr');
     });
 
     it('renders deprecation info', () => {
       expect(screen.queryByText('test-data::: This API is deprecated')).not.toBeNull();
       expect(screen.queryByText('test-data::: This API is deactivated')).toBeNull();
-    });
-  });
-
-  describe('given api with veteran redirect', () => {
-    const apiCategory: APICategory = {
-      ...fakeCategories.lotr,
-      apis: [
-        {
-          ...lotrRingsApi,
-          veteranRedirect: {
-            linkText: 'Find a faster train',
-            linkUrl: 'https://www.va.gov/find-locations/',
-            message: 'Are you tired of waiting?',
-          },
-        },
-        {
-          ...lotrRingsApi,
-        },
-      ],
-      content: {
-        ...fakeCategories.lotr.content,
-        veteranRedirect: {
-          linkText: "Find the facility that's right for you.",
-          linkUrl: 'https://www.va.gov/find-locations/',
-          message: 'Are you a Veteran?',
-        },
-      },
-    };
-
-    it('renders API specific veteran redirect message', async () => {
-      lookupApiCategoryMock.mockReturnValue(apiCategory);
-      lookupApiBySlugMock.mockReturnValue(apiCategory.apis[0]);
-      await renderApiPage(defaultFlags, '/explore/api/rings/docs');
-      expect(screen.getByText('Find a faster train')).not.toBeNull();
     });
   });
 });

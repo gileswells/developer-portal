@@ -3,7 +3,7 @@ import { VaAlert } from '@department-of-veterans-affairs/component-library/dist/
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link, useParams } from 'react-router-dom';
-import { PageHeader } from '../../components';
+import { ApiAlerts, PageHeader } from '../../components';
 import { LPB_APPLY_URL } from '../../types/constants';
 import { ApplySuccessResult } from '../../types/forms/apply';
 import { SUPPORT_CONTACT_PATH, TERMS_OF_SERVICE_PATH } from '../../types/constants/paths';
@@ -48,6 +48,7 @@ const RequestSandboxAccess = (): JSX.Element => {
           <title>{api.name} Request Sandbox Access</title>
         )}
       </Helmet>
+      <ApiAlerts />
       <PageHeader
         header={successResults ? 'Success, happy developing!' : 'Request Sandbox Access'}
         subText={successResults ? '' : api.name}
