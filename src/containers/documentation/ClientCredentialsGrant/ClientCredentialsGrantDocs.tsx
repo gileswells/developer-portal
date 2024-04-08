@@ -39,7 +39,7 @@ const ClientCredentialsGrantDocs = (): JSX.Element => {
           <a href="https://openid.net/specs/draft-jones-json-web-key-03.html">OpenID spec</a>.
         </p>
         <ApisLoader hideSpinner />
-        <GoodToKnow />
+        <GoodToKnow api={api} />
         <GettingStarted />
         <AuthCodeFlowContent api={api} />
         {!EXCLUDE_ICN_FRAGMENTS.includes(api.urlFragment) && <TestUsers />}
