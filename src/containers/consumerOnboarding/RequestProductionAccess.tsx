@@ -32,7 +32,7 @@ const RequestProductionAccess = (): JSX.Element => (
     <p>Before you start onboarding, it&apos;s good to know that:</p>
     <ul className="vads-u-margin-top--0">
       <li>All consumers must be US-based.</li>
-      <li>We do not allow monetizing or selling Veteran data.</li>
+      <li>We do not allow the monetizing or selling of Veteran data.</li>
       <li>Timeline for getting production access varies.</li>
       <li>
         We encourage all apps and websites to comply with{' '}
@@ -49,7 +49,7 @@ const RequestProductionAccess = (): JSX.Element => (
       We use the data you submit to determine whether to schedule a demo or request technical or
       policy-related changes. If we need changes, we&apos;ll send you an email.
     </strong>
-    <div className="vads-l-grid-container">
+    <div className="vads-l-grid-container prod-access-link">
       <Link className="vads-c-action-link--green" to={CONSUMER_APPLICATION_PATH}>
         Complete the production access form
       </Link>
@@ -85,22 +85,24 @@ const RequestProductionAccess = (): JSX.Element => (
             API
           </li>
         </ul>
-        <p className="vads-u-margin-bottom--0">
-          <strong>For VA Facilities API:</strong>
-        </p>
-        <p className="vads-u-margin-top--0">
-          If your app uses the <code>PatientWaitTime</code> resource, a screenshot showing it
-          displays this or a similar message: To read the FAQ on how wait times are calculated,
-          click the &quot;For more information&quot; link on{' '}
-          <a
-            href="https://www.accesstocare.va.gov/PWT/SearchWaitTimes"
-            target="_blank"
-            rel="noreferrer"
-          >
-            this Access To Care page
-          </a>
-          .
-        </p>
+        <div className="vads-u-padding-x--0p5 vads-u-padding-y--0p25 vads-u-background-color--gray-lightest vads-u-color--primary-darker">
+          <p className="vads-u-margin--0">
+            <strong>For VA Facilities API:</strong>
+          </p>
+          <p className="vads-u-margin--0">
+            If your app uses the <code>PatientWaitTime</code> resource, a screenshot showing it
+            displays this or a similar message: To read the FAQ on how wait times are calculated,
+            click the &quot;For more information&quot; link on{' '}
+            <a
+              href="https://www.accesstocare.va.gov/PWT/SearchWaitTimes"
+              target="_blank"
+              rel="noreferrer"
+            >
+              this Access To Care page
+            </a>
+            .
+          </p>
+        </div>
       </VaAccordionItem>
       <VaAccordionItem uswds header="Technical information" level={3}>
         <ul className="checklist">

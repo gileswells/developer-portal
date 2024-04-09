@@ -165,3 +165,22 @@ va-omb-info,
 .dev-portal-omb-info {
   margin-top: 32px;
 }
+
+a.vads-c-action-link--green {
+  color: $color-link-default;
+  text-decoration: underline;
+  @include color-transition;
+
+  &:hover {
+    background-color: $color-link-default-hover;
+    color: inherit;
+    text-decoration: underline;
+  }
+  &:active {
+    color: $color-link-active;
+  }
+  &:visited,
+  &:visited abbr {
+    color: $color-link-visited;
+  }
+}
