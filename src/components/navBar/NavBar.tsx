@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import classNames from 'classnames';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { faChevronDown, faChevronUp, faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
@@ -65,6 +65,51 @@ const NavBar = (props: NavBarProps): JSX.Element => {
       toggleSearchBar();
     }
   });
+
+  useEffect(() => {
+    if (isMobileMenuVisible) {
+      const navbar = document.querySelector('.va-api-nav-inner');
+      if (navbar) {
+        const focusableSelectors = [
+          'button.va-api-mobile-nav-close',
+          'input.va-api-search-autocomplete',
+          'button.va-api-search-submit',
+          'a.va-api-nav-link',
+        ].join(', ');
+
+        const focusableElements = navbar.querySelectorAll(focusableSelectors);
+        if (focusableElements.length === 0) {
+          return undefined;
+        }
+
+        const firstFocusableElement = focusableElements[0] as HTMLElement;
+        const lastFocusableElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+        firstFocusableElement.focus();
+
+        const trapFocus = (e: KeyboardEvent): void => {
+          if (e.key !== 'Tab') {
+            return;
+          }
+
+          if (e.shiftKey && document.activeElement === firstFocusableElement) {
+            lastFocusableElement.focus();
+            e.preventDefault();
+          } else if (!e.shiftKey && document.activeElement === lastFocusableElement) {
+            firstFocusableElement.focus();
+            e.preventDefault();
+          }
+        };
+
+        document.addEventListener('keydown', trapFocus);
+
+        return () => {
+          document.removeEventListener('keydown', trapFocus);
+        };
+      }
+    }
+    return undefined;
+  }, [isMobileMenuVisible]);
 
   return (
     <nav className={navClasses}>
