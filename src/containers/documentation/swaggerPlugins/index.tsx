@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { curlify } from './curlify';
 import ExtendedLayout from './ExtendedLayout';
+import OperationTag from './OperationTag';
 import InfoContainer from './InfoContainer';
 import './StyleOverride.scss';
 import { VersionActions } from './VersionActions';
@@ -16,6 +18,7 @@ const SwaggerPlugins = (versionHandler: (newVersion: string) => void): Plugins =
   components: {
     ExtendedLayout,
     InfoContainer,
+    OperationTag,
     ServersContainer: (): null => null,
     authorizeBtn: (): null => null,
   },
