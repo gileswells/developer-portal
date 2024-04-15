@@ -32,7 +32,7 @@ const TermsOfServiceCheckbox: React.FC<TermsOfServiceCheckboxProps> = <
           <a href={termsOfServiceUrl} target="_blank" rel="noopener noreferrer">
             terms of service
           </a>
-          <span className="form-required-span">(*Required)</span>
+          .<span className="form-required-span">(*Required)</span>
         </p>
       }
       className="vads-u-margin-top--4 terms-of-service-checkbox"

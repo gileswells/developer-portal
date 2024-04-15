@@ -17,8 +17,9 @@ const OAuthCcgAppInfo = (): JSX.Element => {
             type="button"
             className="usa-button usa-button-secondary usa-button-unstyled"
           >
-            Learn how to generate a public key.
+            Learn how to generate a public key
           </button>
+          .
         </p>
       </div>
       <VaModal

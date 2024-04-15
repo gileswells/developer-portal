@@ -15,6 +15,24 @@ const phoneRegex =
   /^(?:\([2-9]\d{2}\)\ ?|[2-9]\d{2}(?:\-?|\ ?|\.?))[2-9]\d{2}[- .]?\d{4}((\ )?(\()?(ext|x|extension)([- .:])?\d{1,6}(\))?)?$/;
 const isListAndLoopEnabled = process.env.REACT_APP_LIST_AND_LOOP_ENABLED === 'true';
 export const attestationApis = ['benefits'];
+export const ethicsPrinciplesAttestationApis = [
+  'appeals',
+  'appealsStatus', // staging
+  'benefits',
+  'benefitsDocuments',
+  'claims',
+  'clinicalHealth',
+  'communityCare',
+  'confirmation',
+  'decision_reviews',
+  'directDepositManagement',
+  'educationBenefits',
+  'lgyGuarantyRemittance',
+  'loanReview',
+  'health',
+  'vaLetterGenerator',
+  'verification',
+];
 
 const validationSchema = [
   yup.object().shape({
@@ -33,6 +51,21 @@ const validationSchema = [
         yup
           .boolean()
           .oneOf([true], 'You must attest to request production access for this API.')
+          .required(),
+    }),
+    ethicsPrinciplesAttested: yup.boolean().when('apis', {
+      is: (value: string[]) => {
+        const formattedApis = value.map(val => val.split('/')[1]);
+        return ethicsPrinciplesAttestationApis.some(api => formattedApis.includes(api));
+      },
+      otherwise: () => yup.boolean(),
+      then: () =>
+        yup
+          .boolean()
+          .oneOf(
+            [true],
+            'You must agree to the Ethics Principles for Access to and Use of Veteran Data.',
+          )
           .required(),
     }),
     is508Compliant: yup.string().oneOf(['yes', 'no']).required('Select yes or no.'),

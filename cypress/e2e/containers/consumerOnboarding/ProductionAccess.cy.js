@@ -61,6 +61,7 @@ describe('Production Access Form', () => {
     cy.get('#isUSBasedCompanyFormFieldyes').click();
     cy.get('#is508CompliantFormFieldyes').click();
     cy.get('#apisFormFieldapikeybenefits').click();
+    cy.get('#ethicsPrinciplesAttestedFormField').click();
     cy.get('#termsOfServiceFormField').click();
     cy.get('#attestation-modal').should('not.be.visible');
     cy.get('#main button[type="submit"]').click();
@@ -85,6 +86,7 @@ describe('Production Access Form', () => {
     cy.get('#isUSBasedCompanyFormFieldno').click();
     cy.get('#is508CompliantFormFieldyes').click();
     cy.get('#apisFormFieldapikeyappeals').click();
+    cy.get('#ethicsPrinciplesAttestedFormField').click();
     cy.get('#termsOfServiceFormField').click();
     cy.get('button.usa-button[type=submit]:contains("Continue")').click();
     cy.get('#non-us-based-modal').should('be.visible');
@@ -135,6 +137,7 @@ describe('Production Access Form', () => {
     cy.get('#main button[type="submit"]').click();
     cy.get('.usa-input-error').should('have.length', '1');
     cy.get('#apisFormFieldapikeyappeals').click();
+    cy.get('#ethicsPrinciplesAttestedFormField').click();
     cy.get('#main button[type="submit"]').click();
     cy.get('.usa-input-error').should('have.length', '0');
   });
@@ -213,6 +216,7 @@ describe('Production Access Form', () => {
 
     verificationFields(cy);
     cy.get('#apisFormFieldacgclinicalHealth').click();
+    cy.get('#ethicsPrinciplesAttestedFormField').click();
     cy.get('#oAuthApplicationTypeFormFieldweb').click();
     cy.get('#oAuthRedirectURIFormField').type('https://developer.va.gov/oauth');
     cy.get('#main button[type="submit"]').click();
@@ -248,6 +252,7 @@ describe('Production Access Form', () => {
 
     verificationFields(cy);
     cy.get('#apisFormFieldccgclaims').click();
+    cy.get('#ethicsPrinciplesAttestedFormField').click();
     cy.get('#oAuthPublicKeyFormField').type(
       '{"kid": null,"kty": "RSA","e": "blah","use": null,"n": "blah"}',
       { parseSpecialCharSequences: false },

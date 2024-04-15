@@ -141,7 +141,7 @@ describe('SandboxAccessForm', () => {
       );
 
       expect(screen.getByRole('textbox', { name: /OAuth public key/ })).toBeInTheDocument();
-      expect(screen.getByText('Learn how to generate a public key.')).toHaveAttribute(
+      expect(screen.getByText('Learn how to generate a public key')).toHaveAttribute(
         'href',
         defaultUrls.ccgPublicKeyUrl,
       );

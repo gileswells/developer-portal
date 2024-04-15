@@ -23,8 +23,9 @@ const OAuthCcgAppInfo: React.FC<OAuthCcgAppInfoProps> = ({
         In order to access an API that uses OAuth 2.0 Client Credentials Grant, you must provide
         your public key.{' '}
         <Link to={ccgPublicKeyUrl} target="_blank">
-          Learn how to generate a public key.
+          Learn how to generate a public key
         </Link>
+        .
       </p>
     </div>
 

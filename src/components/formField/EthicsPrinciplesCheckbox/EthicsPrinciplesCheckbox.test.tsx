@@ -1,39 +1,45 @@
+import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { Form, Formik } from 'formik';
-import React from 'react';
 import * as yup from 'yup';
-import { TERMS_OF_SERVICE_PATH } from '../../../types/constants/paths';
-import TermsOfServiceCheckbox, { TermsOfServiceFormValues } from './TermsOfServiceCheckbox';
+import { ETHICS_PRINCIPLES_URL } from '../../../types/constants/paths';
+import { EthicsPrinciplesCheckbox } from './EthicsPrinciplesCheckbox';
 
-describe('TermsOfServiceCheckbox', () => {
-  describe('rendered elements', () => {
+describe('EthicsPrinciplesCheckbox', () => {
+  describe('renders', () => {
     it('include the checkbox', () => {
       render(
-        <Formik initialValues={{ termsOfService: false }} onSubmit={jest.fn()}>
+        <Formik initialValues={{ ethicsPrinciplesAttested: false }} onSubmit={jest.fn()}>
           <Form noValidate>
-            <TermsOfServiceCheckbox termsOfServiceUrl={TERMS_OF_SERVICE_PATH} />
+            <EthicsPrinciplesCheckbox />
           </Form>
         </Formik>,
       );
 
-      const checkbox = screen.getByRole('checkbox', { name: 'I agree to the terms of service.' });
+      const checkbox = screen.getByRole('checkbox', {
+        name: 'I attest that I have read, understood, and agree to the Ethics Principles for Access to and Use of Veteran Data.',
+      });
       expect(checkbox).toBeInTheDocument();
     });
 
     it('include the description and link', () => {
       render(
-        <Formik initialValues={{ termsOfService: false }} onSubmit={jest.fn()}>
+        <Formik initialValues={{ ethicsPrinciplesAttested: false }} onSubmit={jest.fn()}>
           <Form noValidate>
-            <TermsOfServiceCheckbox termsOfServiceUrl={TERMS_OF_SERVICE_PATH} />
+            <EthicsPrinciplesCheckbox />
           </Form>
         </Formik>,
       );
 
-      const termsLink = screen.getByRole('link', { name: 'terms of service' });
+      const termsLink = screen.getByRole('link', {
+        name: 'Ethics Principles for Access to and Use of Veteran Data',
+      });
       expect(termsLink).toBeInTheDocument();
-      expect(termsLink).toHaveAttribute('href', '/terms-of-service');
-      expect(termsLink.parentElement).toHaveTextContent('Review our terms of service.(*Required)');
+      expect(termsLink).toHaveAttribute('href', ETHICS_PRINCIPLES_URL);
+      expect(termsLink.parentElement).toHaveTextContent(
+        'Review our Ethics Principles for Access to and Use of Veteran Data.(*Required)',
+      );
 
       // ensure terms of service link opens in a new tab
       expect(termsLink).toHaveAttribute('target', '_blank');
@@ -41,23 +47,25 @@ describe('TermsOfServiceCheckbox', () => {
     });
   });
 
-  describe('changes the termsOfService value', () => {
+  describe('changes the ethicsPrinciplesAttested value', () => {
     const testValueChange = (initialValue: boolean) => async (): Promise<void> => {
-      const checkValue = jest.fn((values: TermsOfServiceFormValues): void => {
-        expect(values.termsOfService).toBe(!initialValue);
+      const checkValue = jest.fn(({ ethicsPrinciplesAttested }): void => {
+        expect(ethicsPrinciplesAttested).toBe(!initialValue);
       });
 
       render(
-        <Formik initialValues={{ termsOfService: initialValue }} onSubmit={checkValue}>
+        <Formik initialValues={{ ethicsPrinciplesAttested: initialValue }} onSubmit={checkValue}>
           <Form noValidate>
-            <TermsOfServiceCheckbox termsOfServiceUrl={TERMS_OF_SERVICE_PATH} />
+            <EthicsPrinciplesCheckbox />
             <button type="submit">Submit</button>
           </Form>
         </Formik>,
       );
 
       await userEvent.click(
-        screen.getByRole('checkbox', { name: 'I agree to the terms of service.' }),
+        screen.getByRole('checkbox', {
+          name: 'I attest that I have read, understood, and agree to the Ethics Principles for Access to and Use of Veteran Data.',
+        }),
       );
       await userEvent.click(screen.getByRole('button', { name: 'Submit' }));
 
@@ -72,28 +80,30 @@ describe('TermsOfServiceCheckbox', () => {
 
   describe('validation', () => {
     const schema = yup.object().shape({
-      termsOfService: yup.boolean().oneOf([true], 'Accept the terms or else.').required(),
+      ethicsPrinciplesAttested: yup.boolean().oneOf([true], 'Accept the terms or else.').required(),
     });
 
     it('does not have an error message when there is no error', async () => {
       const submitMock = jest.fn();
       render(
         <Formik
-          initialValues={{ termsOfService: false }}
+          initialValues={{ ethicsPrinciplesAttested: false }}
           onSubmit={submitMock}
           validateOnBlur={false}
           validateOnChange={false}
           validationSchema={schema}
         >
           <Form noValidate>
-            <TermsOfServiceCheckbox termsOfServiceUrl={TERMS_OF_SERVICE_PATH} />
+            <EthicsPrinciplesCheckbox />
             <button type="submit">Submit</button>
           </Form>
         </Formik>,
       );
 
       await userEvent.click(
-        screen.getByRole('checkbox', { name: 'I agree to the terms of service.' }),
+        screen.getByRole('checkbox', {
+          name: 'I attest that I have read, understood, and agree to the Ethics Principles for Access to and Use of Veteran Data.',
+        }),
       );
       await userEvent.click(screen.getByRole('button', { name: 'Submit' }));
 
@@ -105,14 +115,14 @@ describe('TermsOfServiceCheckbox', () => {
       const submitMock = jest.fn();
       render(
         <Formik
-          initialValues={{ termsOfService: false }}
+          initialValues={{ ethicsPrinciplesAttested: false }}
           onSubmit={submitMock}
           validateOnBlur={false}
           validateOnChange={false}
           validationSchema={schema}
         >
           <Form noValidate>
-            <TermsOfServiceCheckbox termsOfServiceUrl={TERMS_OF_SERVICE_PATH} />
+            <EthicsPrinciplesCheckbox />
             <button type="submit">Submit</button>
           </Form>
         </Formik>,

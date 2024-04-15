@@ -15,7 +15,10 @@
 
 import store from '../store';
 import { apiLoadingState } from '../types/constants';
-import { attestationApis } from '../containers/consumerOnboarding/validationSchema';
+import {
+  attestationApis,
+  ethicsPrinciplesAttestationApis,
+} from '../containers/consumerOnboarding/validationSchema';
 import { isHostedApiEnabled } from './env';
 import { isApiDeactivated } from './deprecated';
 import { APICategories, APICategory, APIDescription, VaInternalOnly } from './schema';
@@ -126,6 +129,9 @@ const lookupAttestationApi = (api: string): APIDescription | undefined =>
 const lookupAttestationIdentifier = (apis: string[]): string | undefined =>
   attestationApis.find(api => apis.includes(api));
 
+const lookupEthicsPrinciplesIdentifier = (apis: string[]): string | undefined =>
+  ethicsPrinciplesAttestationApis.find(api => apis.includes(api));
+
 const apisFor = (
   selectedApiList: string[],
   authRegex: RegExp = /^(acg|apikey|ccg)\/[a-z]{1}/,
@@ -206,4 +212,5 @@ export {
   includesOpenDataAPI,
   lookupAttestationApi,
   lookupAttestationIdentifier,
+  lookupEthicsPrinciplesIdentifier,
 };

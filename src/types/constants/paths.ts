@@ -41,3 +41,5 @@ export const SUPPORT_PATH = '/support';
 export const SUPPORT_CONTACT_PATH = '/support/contact-us';
 
 export const TERMS_OF_SERVICE_PATH = '/terms-of-service';
+export const ETHICS_PRINCIPLES_URL =
+  'https://digital.va.gov/ethics-principles-for-access-to-and-use-of-veteran-data/';

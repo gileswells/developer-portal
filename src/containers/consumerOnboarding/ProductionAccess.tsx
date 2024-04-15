@@ -101,6 +101,7 @@ export interface Values {
   state: string;
   zipCode5: string;
   attestationChecked?: boolean;
+  ethicsPrinciplesAttested?: boolean;
 }
 
 const initialValues: Values = {
@@ -117,6 +118,7 @@ const initialValues: Values = {
   city: '',
   country: '',
   distributingAPIKeysToCustomers: '',
+  ethicsPrinciplesAttested: false,
   exposeVeteranInformationToThirdParties: '',
   is508Compliant: '',
   isUSBasedCompany: '',
