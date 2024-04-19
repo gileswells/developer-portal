@@ -47,5 +47,8 @@ cypress/integration/1-getting-started
 cypress/integration/2-advanced-examples
 smoketest/vendor
 
+# Support testing purposes
+public/data/platform-backend/v0/providers/transformations/legacy.json
+
 # Cypress smoketest api list file
 requiredApiSignups.json

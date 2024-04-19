@@ -14,7 +14,6 @@ import ApiDocumentation from './ApiDocumentation';
 const ReleaseNotes: string = 'My API&apos;s release notes';
 const api: APIDescription = {
   altID: null,
-  blockSandboxForm: false,
   categoryUrlFragment: 'nothing-of-importance',
   categoryUrlSlug: 'nothing-of-importance',
   description: "it's a great API!",
@@ -33,8 +32,9 @@ const api: APIDescription = {
   openData: false,
   overviewPageContent: '## Default overview page content',
   releaseNotes: ReleaseNotes,
-  restrictedAccessDetails: null,
-  restrictedAccessToggle: false,
+  restrictedAccess: {
+    restricted: false,
+  },
   urlFragment: 'my_api',
   urlSlug: 'my-api',
   veteranRedirect: null,

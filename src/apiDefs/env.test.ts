@@ -37,7 +37,6 @@ describe('env module', () => {
     const disabledApiId = 'fake_api';
     const sharedApiValues = {
       altID: null,
-      blockSandboxForm: false,
       categoryUrlFragment: 'nothing-of-importance',
       categoryUrlSlug: 'nothing-of-importance',
       description: "it's a fabulous API, you really must try it sometime",
@@ -50,8 +49,7 @@ describe('env module', () => {
       oAuthTypes: null,
       openData: false,
       releaseNotes: 'Dummy release notes.',
-      restrictedAccessDetails: null,
-      restrictedAccessToggle: false,
+      restrictedAccess: { restricted: false },
       urlSlug: 'my-api',
       veteranRedirect: null,
     };

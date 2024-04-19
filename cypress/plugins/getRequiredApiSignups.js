@@ -27,7 +27,12 @@ export const getRequiredApiSignups = async () => {
       });
       apis
         .filter(api => api.altID)
-        .filter(api => !api.blockSandboxForm)
+        .filter(api => {
+          if (api.restrictedAccess.blockSandboxAccessForm) {
+            return false;
+          }
+          return !!api.restrictedAccess.versions?.some(version => !version.blockSandboxAccessForm);
+        })
         .forEach(api => {
           if (api.oAuth) {
             if (api.oAuthTypes.includes('AuthorizationCodeGrant')) {

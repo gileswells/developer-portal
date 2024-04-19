@@ -207,7 +207,7 @@ export const SandboxAccessForm = ({
             {authTypes.length > 1 && (
               <FieldSet
                 className="vads-u-margin-top--4"
-                legend="Choose your auth type"
+                legend="Choose your auth type."
                 name="typeAndApi"
                 required
               >

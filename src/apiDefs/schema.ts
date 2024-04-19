@@ -68,7 +68,6 @@ export enum ProdAccessFormSteps {
 }
 
 export interface APIDescription {
-  readonly blockSandboxForm: boolean;
   readonly isStealthLaunched: boolean;
   readonly name: string;
   readonly docSources: APIDocSource[];
@@ -79,8 +78,7 @@ export interface APIDescription {
   readonly description: string;
   readonly enabledByDefault: boolean;
   readonly vaInternalOnly?: VaInternalOnly;
-  readonly restrictedAccessDetails: string | null;
-  readonly restrictedAccessToggle: boolean;
+  readonly restrictedAccess: RestrictedAccess;
   readonly openData: boolean;
   readonly oAuth: boolean;
   readonly oAuthTypes: string[] | null;
@@ -148,4 +146,20 @@ export enum VaInternalOnly {
   StrictlyInternal = 'StrictlyInternal',
   AdditionalDetails = 'AdditionalDetails',
   FlagOnly = 'FlagOnly',
+}
+
+export interface RestrictedAccess {
+  blockProdAccessForm?: boolean; // true == prod access form 100% blocked
+  blockSandboxAccessForm?: boolean; // true == sandbox form 100% blocked
+  description?: string; // Public facing reason for restriction
+  restricted: boolean; // true == all versions and all auth types restricted
+  versions?: RestrictedAccessVersion[]; // Drill down into specific versions / auth types with restrictions
+}
+
+export interface RestrictedAccessVersion {
+  authType: 'acg' | 'apikey' | 'ccg';
+  blockProdAccessForm?: boolean;
+  blockSandboxAccessForm?: boolean;
+  description?: string; // If missing, use RestrictedAccess.description
+  version: string;
 }

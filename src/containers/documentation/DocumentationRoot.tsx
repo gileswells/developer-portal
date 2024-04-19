@@ -8,6 +8,7 @@ import { apiLoadingState } from '../../types/constants';
 import ApisLoader from '../../components/apisLoader/ApisLoader';
 import './Documentation.scss';
 import { RootState, UserStore } from '../../types';
+import { allowSandboxForm } from '../../utils/restrictedAccessHelper';
 
 interface ExploreSideNavProps {
   api: APIDescription;
@@ -56,7 +57,7 @@ const ExploreSideNav = (props: ExploreSideNavProps): JSX.Element => {
         <SideNavEntry end name="Client Credentials Grant" subNavLevel={1} to="client-credentials" />
       )}
       <SideNavEntry end name="Release notes" subNavLevel={1} to="release-notes" />
-      {!api.blockSandboxForm && (
+      {allowSandboxForm(api) && (
         <SideNavEntry end name="Sandbox access" subNavLevel={1} to="sandbox-access" />
       )}
     </>

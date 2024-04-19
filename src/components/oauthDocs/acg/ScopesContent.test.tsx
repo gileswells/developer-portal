@@ -9,7 +9,6 @@ const renderComponentWithScopes = (scopes: string[]): void => {
   const props: ApiRequiredProps = {
     api: {
       altID: 'defaultAPI',
-      blockSandboxForm: false,
       categoryUrlFragment: 'default',
       categoryUrlSlug: 'default',
       description: 'Does default API stuff',
@@ -41,8 +40,7 @@ const renderComponentWithScopes = (scopes: string[]): void => {
       openData: false,
       overviewPageContent: '## With this API you can do default stuff',
       releaseNotes: '',
-      restrictedAccessDetails: null,
-      restrictedAccessToggle: false,
+      restrictedAccess: { restricted: false },
       urlFragment: 'default-api',
       urlSlug: 'default',
       veteranRedirect: null,

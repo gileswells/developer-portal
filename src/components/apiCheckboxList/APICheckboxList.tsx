@@ -4,6 +4,7 @@ import { APIDescription } from '../../apiDefs/schema';
 import { Flag } from '../../flags';
 import { FLAG_HOSTED_APIS } from '../../types/constants';
 import './APICheckboxList.scss';
+import { isApiAuthTypeRestricted } from '../../utils/restrictedAccessHelper';
 
 interface APICheckboxListProps {
   apis: APIDescription[];
@@ -21,7 +22,9 @@ const ApiCheckboxList = ({ apis, authType }: APICheckboxListProps): JSX.Element 
             <>
               <span>{api.name}</span>
               <span className="vads-u-display--inline-block vads-u-margin-left--1">
-                {api.vaInternalOnly && <ApiTag showLock tagName="Restricted Access" />}
+                {isApiAuthTypeRestricted(api, authType) && (
+                  <ApiTag showLock tagName="Restricted Access" />
+                )}
                 {api.openData && <ApiTag tagName="Open Data" />}
               </span>
             </>
