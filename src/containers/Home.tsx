@@ -90,12 +90,6 @@ const GettingStarted = (): JSX.Element => (
 const Home = (): JSX.Element => (
   <div className="home vads-l-grid-container--full">
     <Hero />
-    <h1>This is just here to purposely mess with visual regressions</h1>
-    <h1>This is just here to purposely and overly with visual regressions</h1>
-    <h1>This is just here to purposely and overly with visual regressions</h1>
-    <h1>This is just here to purposely and overly with visual regressions</h1>
-    <h1>This is just here to purposely and overly with visual regressions</h1>
-    <h1>This is just here to purposely and overly with visual regressions</h1>
     <GettingStarted />
     <ApiList />
   </div>
