@@ -13,7 +13,7 @@ jobs:
       time_string: ${{ steps.get_time_string.outputs.time_string }}
     steps:
       - name: Set timezone to Eastern
-        uses: szenius/set-timezone@v1.0
+        uses: szenius/set-timezone@v2.0
         with:
           timezoneLinux: 'America/New_York'
       - id: get_time_string
@@ -52,7 +52,7 @@ jobs:
           echo "mr_number=$MR_NUMBER" >> $GITHUB_OUTPUT
           echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4.0.0
         with:
           aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
           aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
@@ -113,14 +113,14 @@ jobs:
               sleep 15;
             fi
           done
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         if: steps.deploy_to_production.outcome == 'success'
       - name: Disable Workflow till next MR is created
         if: steps.deploy_to_production.outcome == 'success'
         run: gh workflow disable 'Auto Deploy master to Production'
       - name: Handle failure
         if: failure()
-        uses: slackapi/slack-github-action@v1.23.0
+        uses: slackapi/slack-github-action@v1.26.0
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         with:
