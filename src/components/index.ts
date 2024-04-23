@@ -8,7 +8,6 @@ export * from './search/Search';
 export * from './sideNav/SideNav';
 export * from './sideNav/SideNavEntry';
 export * from './mainNavItem/MainNavItem';
-export * from './banner/Banner';
 export * from './footer/Footer';
 export * from './cardLink/CardLink';
 export * from './embeddedYoutubeVideo/EmbeddedYoutubeVideo';

@@ -184,3 +184,8 @@ a.vads-c-action-link--green {
     color: $color-link-visited;
   }
 }
+
+va-official-gov-banner:focus {
+  outline: none;
+  outline-offset: 0;
+}

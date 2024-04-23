@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import classNames from 'classnames';
-import { Banner, NavBar, TestingNotice } from '../../components';
+import { VaOfficialGovBanner } from '@department-of-veterans-affairs/component-library/dist/react-bindings';
+import { NavBar, TestingNotice } from '../../components';
 import { Flag } from '../../flags';
 import { mobileOnly } from '../../styles/vadsUtils';
 import { FLAG_SHOW_TESTING_NOTICE } from '../../types/constants';
@@ -67,7 +68,7 @@ export const Header = (): JSX.Element => {
         <Link to={{ ...location, hash: '#main' }} className={hashLinkClassNames}>
           Skip to main content
         </Link>
-        <Banner />
+        <VaOfficialGovBanner />
 
         <div className={headerContentContainerClassNames}>
           <div className={headerContentLinkClassNames}>
