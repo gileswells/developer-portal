@@ -12,14 +12,16 @@ jobs:
   is_labeled:
     runs-on: ubuntu-latest
     steps:
-      - uses: mheap/github-action-required-labels@v1
+      - uses: mheap/github-action-required-labels@v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           mode: exactly
           count: 1
-          labels: 'impact: users, impact: maintainers'
-      - uses: mheap/github-action-required-labels@v1
+          labels: |
+            impact: users
+            impact: maintainers
+      - uses: mheap/github-action-required-labels@v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

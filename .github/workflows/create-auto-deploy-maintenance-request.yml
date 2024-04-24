@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set timezone to Eastern
-        uses: szenius/set-timezone@v1.0
+        uses: szenius/set-timezone@v2.0
         with:
           timezoneLinux: 'America/New_York'
       - id: check_for_existing_mr
@@ -85,7 +85,7 @@ jobs:
         if: |
           steps.check_for_existing_mr.outcome == 'success'
           && steps.check_if_new_release.outcome == 'success'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - id: create_mr
         name: Generate the MR body text and create MR
         env:
