@@ -112,7 +112,7 @@ jobs:
           touch build/$BUILD_ENV/platform-backend/v0/support/contact-us/requests
           touch build/$BUILD_ENV/platform-backend/v0/consumers/production-requests
 
-      - name: Cache builds within The Matrix
+      - name: Cache builds within the matrix
         uses: actions/cache@v4
         with:
           key: pr-build-${{matrix.environment}}-${{github.sha}}
@@ -122,7 +122,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # - uses: actions/checkout@v4
       - name: Fetch dev cache
         uses: actions/cache@v4
         with:
@@ -138,13 +137,6 @@ jobs:
         with:
           key: pr-build-production-${{github.sha}}
           path: build
-      - name: See what we have for files
-        run: |
-          ls -la ./
-          ls -la ./build
-          ls -la ./build/dev
-          ls -la ./build/staging
-          ls -la ./build/production
       - name: Save builds as GitHub Artifacts
         uses: actions/upload-artifact@v4
         with:
