@@ -115,7 +115,7 @@ jobs:
       - name: Cache builds within The Matrix
         uses: actions/cache@v4
         with:
-          key: pr-build-${{matrix.environment}}-${{github.head_ref}}
+          key: pr-build-${{matrix.environment}}-${{github.sha}}
           path: build
   artifact_builds:
     needs: [pr_builds]
@@ -126,17 +126,17 @@ jobs:
       - name: Fetch dev cache
         uses: actions/cache@v4
         with:
-          key: pr-build-dev-${{github.head_ref}}
+          key: pr-build-dev-${{github.sha}}
           path: build
       - name: Fetch staging cache
         uses: actions/cache@v4
         with:
-          key: pr-build-staging-${{github.head_ref}}
+          key: pr-build-staging-${{github.sha}}
           path: build
       - name: Fetch production cache
         uses: actions/cache@v4
         with:
-          key: pr-build-production-${{github.head_ref}}
+          key: pr-build-production-${{github.sha}}
           path: build
       - name: See what we have for files
         run: |
