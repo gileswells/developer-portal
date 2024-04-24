@@ -53,6 +53,8 @@ jobs:
   pr_builds:
     needs: [install]
     runs-on: ubuntu-latest
+    outputs:
+      environmentMatrix: 'dev staging production'
     strategy:
       matrix:
         environment: ['dev', 'staging', 'production']
@@ -115,8 +117,42 @@ jobs:
           touch build/$BUILD_ENV/platform-backend/v0/support/contact-us/requests
           touch build/$BUILD_ENV/platform-backend/v0/consumers/production-requests
 
-      - name: Save builds as GitHub Artifacts
-        uses: actions/upload-artifact@v3
+      - name: Cache builds within The Matrix
+        uses: actions/cache@v4
         with:
-          name: pr-builds
+          key: pr-build-${{matrix.environment}}-${{github.ref}}
           path: build
+  artifact_builds:
+    needs: [pr_builds]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check available data
+        continue-on-error: true
+        run: |
+          echo ${{needs.pr_builds.outputs.environmentMatrix}}
+          echo ${{needs.pr_builds}}
+
+      - name: Fetch dev cache
+        uses: actions/cache@v4
+        with:
+          key: pr-build-dev-${{github.ref}}
+          path: build
+      - name: Fetch staging cache
+        uses: actions/cache@v4
+        with:
+          key: pr-build-staging-${{github.ref}}
+          path: build
+      - name: Fetch production cache
+        uses: actions/cache@v4
+        with:
+          key: pr-build-production-${{github.ref}}
+          path: build
+      - name: See what we have for files
+        run: |
+          ls -la ./
+          ls -la ./build
+          ls -la ./build/dev
+          ls -la ./build/staging
+          ls -la ./build/production
